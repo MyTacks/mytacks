@@ -1,0 +1,4 @@
+<div class="quote">
+  <blockquote>Stop.  Look.  Then Go.</blockquote>
+  <cite>Anonymous</cite>
+</div>
