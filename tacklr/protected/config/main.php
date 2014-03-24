@@ -43,6 +43,16 @@ return array(
 
 	// application components
 	'components'=>array(
+            'clientScript'=>array(
+                'packages'=>array(
+                    'jquery'=>array(
+//                        'baseUrl'=>dirname(__FILE__)."../../../",
+//                        'js'=>array('js/jquery-1.10.2.js',
+ //                           'js/jquery-ui-1.10.4.custom.js',
+   //                         'js/jquery-ui-1.10.4.custom.min.js'),
+                    ),
+                ),
+            ),
 			'mail' => array(
 					'class' => 'ext.YiiMailer.YiiMailer',
 					'transportType'=>'smtp',

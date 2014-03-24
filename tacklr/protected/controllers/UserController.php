@@ -74,6 +74,15 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+		
+			if(User::model()->exists('username=:username',array('username'=>$model->username)))
+			{
+					echo 'User already exists';
+					//$this->redirect('/mytacks/tacklr/user/create');
+            		return;
+			}
+       
+
 			$model->groupID = 2;
 			$model->active = 0;
 			$model->updateDate = $timeStamp;
@@ -81,16 +90,20 @@ class UserController extends Controller
 			$model->activeKey = crypt($model->username.$rnd);
 			$activationUrl = Yii::app()->getBaseUrl(true).'/user/activate?id='.$model->activeKey;
 			$uploadedFile=CUploadedFile::getInstance($model,'imageURL'); // get the file name to be uploaded
-			$fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
-			// store baseURL and image name .....http://localhost:8080/tckle/images/226-php24.jpg
-			$model->imageURL = Yii::app()->getBaseUrl(true).'/images/'.$fileName; 
-			
+
+            if($uploadedFile)
+            {
+                $fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
+                $uploadedFile->saveAs(Yii::app()->basePath.'/../images/'.$fileName);
+                // store baseURL and image name .....http://localhost:8080/tckle/images/226-php24.jpg
+                $model->imageURL = Yii::app()->getBaseUrl(true).'/images/'.$fileName;
+            }
+
 			//$fullImgSource = Yii::getPathOfAlias('webroot').'/media/images/'.$fullImgName;    
 			$model->password =crypt($model->password,$model->activeKey);
 			if($model->save())
 			{
 				$this->sendActivatioEmail($activationUrl, $model->email);
-				$uploadedFile->saveAs(Yii::app()->basePath.'/../images/'.$fileName);
 				$this->redirect(array('view','id'=>$model->userID));
 			}
 				
