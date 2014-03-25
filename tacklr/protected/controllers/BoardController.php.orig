@@ -6,7 +6,7 @@ class BoardController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/boardmain';
 
 	/**
 	 * @return array action filters
@@ -15,11 +15,7 @@ class BoardController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-<<<<<<< HEAD
-			//'postOnly + delete', // we only allow deletion via POST request
-=======
             'postOnly + delete', // we only allow deletion via POST request
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 		);
 	}
 
@@ -37,21 +33,11 @@ class BoardController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create', 'update' and 'delete' actions
 				'actions'=>array('create','update','delete'),
-				'users'=>array('*'),
+				'users'=>array('@'),
 			),
-<<<<<<< HEAD
-            array('allow', // allow authenticated user to perform 'delete' actions
-                'actions'=>array('delete'),
-                'users'=>array('@'),
-            ),
-			array('allow', // allow admin user to perform 'admin' actions
-				'actions'=>array('admin'),
-				'users'=>array('admin'),
-=======
 			array('allow', // allow admin user to perform 'admin' actions
 				'actions'=>array('admin'),
 				'users'=>array('*'),
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
