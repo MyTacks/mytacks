@@ -9,8 +9,8 @@
  * @property integer $boardID
  * @property integer $isPrivate
  * @property string $tackName
- * @property string $tackContent
- * @property string $tackImage
+ * @property string $tackURL
+ * @property string $imageURL
  * @property string $tackDescription
  * @property string $updateDate
  * @property string $createDate
@@ -37,14 +37,14 @@ class Tack extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tackName, tackContent, tackDescription, updateDate', 'required'),
+			array('tackName, tackURL, tackDescription', 'required'),
 			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
 			array('userID', 'length', 'max'=>20),
-			array('tackContent, tackImage', 'length', 'max'=>255),
+			array('tackURL, imageURL', 'length', 'max'=>255),
 			array('createDate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tackID, userID, boardID, isPrivate, tackName, tackContent, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
+			array('tackID, userID, boardID, isPrivate, tackName, tackURL, imageURL, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,10 +70,10 @@ class Tack extends CActiveRecord
 			'tackID' => 'Tack',
 			'userID' => 'User',
 			'boardID' => 'Board',
-			'isPrivate' => 'Is Private',
+			'isPrivate' => 'Private',
 			'tackName' => 'Tack Name',
-			'tackContent' => 'Tack Content',
-			'tackImage' => 'Tack Image',
+			'tackURL' => 'Tack Url',
+			'imageURL' => 'Image Url',
 			'tackDescription' => 'Tack Description',
 			'updateDate' => 'Update Date',
 			'createDate' => 'Create Date',
@@ -103,8 +103,8 @@ class Tack extends CActiveRecord
 		$criteria->compare('boardID',$this->boardID);
 		$criteria->compare('isPrivate',$this->isPrivate);
 		$criteria->compare('tackName',$this->tackName,true);
-		$criteria->compare('tackContent',$this->tackContent,true);
-		$criteria->compare('tackImage',$this->tackImage,true);
+		$criteria->compare('tackURL',$this->tackURL,true);
+		$criteria->compare('imageURL',$this->imageURL,true);
 		$criteria->compare('tackDescription',$this->tackDescription,true);
 		$criteria->compare('updateDate',$this->updateDate,true);
 		$criteria->compare('createDate',$this->createDate,true);
@@ -124,4 +124,9 @@ class Tack extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getIsPrivateOptions()
+    {
+        return array('1' => 'Yes', '0' => 'No');
+    }
 }

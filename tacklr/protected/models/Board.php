@@ -16,10 +16,11 @@
  * @property Category $category
  * @property User $user
  * @property Follow[] $follows
- * @property Link[] $links
+ * @property Tack[] tacks
  */
 class Board extends CActiveRecord
 {
+    public $BID;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -58,7 +59,7 @@ class Board extends CActiveRecord
 			'category' => array(self::BELONGS_TO, 'Category', 'categoryID'),
 			'user' => array(self::BELONGS_TO, 'User', 'userID'),
 			'follows' => array(self::HAS_MANY, 'Follow', 'boardID'),
-			'links' => array(self::HAS_MANY, 'Link', 'boardID'),
+			'tacks' => array(self::HAS_MANY, 'Tack', 'boardID'),
 		);
 	}
 

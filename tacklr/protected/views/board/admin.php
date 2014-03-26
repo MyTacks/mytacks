@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Board', 'url'=>array('index')),
-	array('label'=>'Create Board', 'url'=>array('create')),
+	array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary','label'=>'List Board', 'url'=>array('index')),
+	array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary','label'=>'Create Board', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "

@@ -7,8 +7,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Board', 'url'=>array('create')),
-	array('label'=>'Manage Board', 'url'=>array('admin')),
+	array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary' ,'label'=>'Create Board', 'url'=>array('create')),
+	//array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary', 'label'=>'Manage Board', 'url'=>array('admin')),
 );
 ?>
 <?php
@@ -30,31 +30,26 @@ $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
 $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
 $UID = ($user_in_db['userID']);
 //echo $UID;
-$boards = Board::model()->findAllByAttributes( array('userID'=>(int)$UID));
-
-
+$boards = Board::model()->findAllByAttributes(array('userID'=>(int)$UID));
 ?>
+
 <div class="row">
     <div class="span12">
         <ul class="thumbnails">
 <?php
 foreach ($boards as $board)
 {
-    //echo CHtml::button($board['boardTitle'], array('onclick' => 'js:document.location.href="board/view?&id='.$board['boardID'].'"'));
     ?>
-    <li class="span4">
-       <!-- <div class="col-sm-6 col-md-3"> -->
+        <li class="span4">
             <a href="board/view?&id=<?php echo $board['boardID']; ?>" class="thumbnail">
-                <!-- <img src="holder.js/300x200" alt=""> -->
                 <div class="caption">
                     <h3> <?php echo $board['boardTitle'] ?></h3>
                 </div>
             </a>
-        <!-- </div> -->
-    </li>
+        </li>
 <?php
 }
 ?>
-            </ul>
-        </div>
+        </ul>
     </div>
+</div>

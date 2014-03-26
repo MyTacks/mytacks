@@ -1,6 +1,6 @@
 <?php
 
-class TackController extends Controller
+class LinkController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -62,25 +62,16 @@ class TackController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Tack;
-        $pst = new DateTimeZone('America/Los_Angeles');
-        $date = new DateTime();
-        $date->setTimezone($pst);
-        $timeStamp = $date->format('Y-m-d H:i:s');
+		$model=new Link;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tack']))
+		if(isset($_POST['Link']))
 		{
-			$model->attributes=$_POST['Tack'];
-
-            $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
-            $UID = ($user_in_db['userID']);
-            $model->userID = $UID;
-            $model->createDate = $timeStamp;
+			$model->attributes=$_POST['Link'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->tackID));
+				$this->redirect(array('view','id'=>$model->linkID));
 		}
 
 		$this->render('create',array(
@@ -100,11 +91,11 @@ class TackController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tack']))
+		if(isset($_POST['Link']))
 		{
-			$model->attributes=$_POST['Tack'];
+			$model->attributes=$_POST['Link'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->tackID));
+				$this->redirect(array('view','id'=>$model->linkID));
 		}
 
 		$this->render('update',array(
@@ -131,7 +122,7 @@ class TackController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tack');
+		$dataProvider=new CActiveDataProvider('Link');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -142,10 +133,10 @@ class TackController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Tack('search');
+		$model=new Link('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Tack']))
-			$model->attributes=$_GET['Tack'];
+		if(isset($_GET['Link']))
+			$model->attributes=$_GET['Link'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -156,12 +147,12 @@ class TackController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Tack the loaded model
+	 * @return Link the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Tack::model()->findByPk($id);
+		$model=Link::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -169,11 +160,11 @@ class TackController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Tack $model the model to be validated
+	 * @param Link $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='tack-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='link-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

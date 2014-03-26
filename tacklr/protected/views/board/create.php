@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Board', 'url'=>array('index')),
-	array('label'=>'Manage Board', 'url'=>array('admin')),
+	array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary', 'label'=>'List Boards', 'url'=>array('index')),
+	//array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary', 'label'=>'Manage Board', 'url'=>array('admin')),
 );
 ?>
 

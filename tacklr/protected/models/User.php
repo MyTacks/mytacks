@@ -71,7 +71,7 @@ class User extends CActiveRecord
 		return array(
 			'boards' => array(self::HAS_MANY, 'Board', 'userID'),
 			'follows' => array(self::HAS_MANY, 'Follow', 'userID'),
-			'links' => array(self::HAS_MANY, 'Link', 'userID'),
+			'tacks' => array(self::HAS_MANY, 'Tack', 'userID'),
 			'messages' => array(self::HAS_MANY, 'Message', 'senderID'),
 			'messages1' => array(self::HAS_MANY, 'Message', 'receiverID'),
 			'group' => array(self::BELONGS_TO, 'Group', 'groupID'),

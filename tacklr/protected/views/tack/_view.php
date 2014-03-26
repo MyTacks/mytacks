@@ -5,8 +5,8 @@
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('linkID')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->linkID), array('view', 'id'=>$data->linkID)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tackID')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->tackID), array('view', 'id'=>$data->tackID)); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('userID')); ?>:</b>
@@ -25,12 +25,12 @@
 	<?php echo CHtml::encode($data->tackName); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tackContent')); ?>:</b>
-	<?php echo CHtml::encode($data->tackContent); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tackURL')); ?>:</b>
+	<?php echo CHtml::encode($data->tackURL); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tackImage')); ?>:</b>
-	<?php echo CHtml::encode($data->tackImage); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('imageURL')); ?>:</b>
+	<?php echo CHtml::encode($data->imageURL); ?>
 	<br />
 
 	<?php /*

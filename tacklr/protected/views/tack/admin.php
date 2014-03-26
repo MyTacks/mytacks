@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Tack', 'url'=>array('index')),
-	array('label'=>'Create Tack', 'url'=>array('create')),
+	array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary','label'=>'List Tack', 'url'=>array('index')),
+	array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary','label'=>'Create Tack', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -45,14 +45,14 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'linkID',
+		'tackID',
 		'userID',
 		'boardID',
 		'isPrivate',
 		'tackName',
-		'tackContent',
+		'tackURL',
 		/*
-		'tackImage',
+		'imageURL',
 		'tackDescription',
 		'updateDate',
 		'createDate',

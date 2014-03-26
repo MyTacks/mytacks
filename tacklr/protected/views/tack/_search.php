@@ -12,8 +12,8 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'linkID'); ?>
-		<?php echo $form->textField($model,'linkID',array('size'=>20,'maxlength'=>20)); ?>
+		<?php echo $form->label($model,'tackID'); ?>
+		<?php echo $form->textField($model,'tackID',array('size'=>20,'maxlength'=>20)); ?>
 	</div>
 
 	<div class="row">
@@ -37,13 +37,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'tackContent'); ?>
-		<?php echo $form->textField($model,'tackContent',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->label($model,'tackURL'); ?>
+		<?php echo $form->textField($model,'tackURL',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'tackImage'); ?>
-		<?php echo $form->textField($model,'tackImage',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->label($model,'imageURL'); ?>
+		<?php echo $form->textField($model,'imageURL',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">

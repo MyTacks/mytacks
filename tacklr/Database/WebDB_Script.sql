@@ -101,12 +101,7 @@ CREATE TABLE tbl_follow (
 );
 
 /*
-* Message Table
-*/
-DROP TABLE IF EXISTS tbl_message;
-
-/*
-* Link table
+* tack table
 */
 DROP TABLE IF EXISTS tbl_tack;
 CREATE TABLE tbl_tack (

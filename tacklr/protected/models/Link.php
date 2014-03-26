@@ -16,8 +16,8 @@
  * @property string $createDate
  *
  * The followings are the available model relations:
- * @property User $user
- * @property Board $board
+ * @property TblUser $user
+ * @property TblBoard $board
  */
 class Link extends CActiveRecord
 {
@@ -56,8 +56,8 @@ class Link extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'User', 'userID'),
-			'board' => array(self::BELONGS_TO, 'Board', 'boardID'),
+			'user' => array(self::BELONGS_TO, 'TblUser', 'userID'),
+			'board' => array(self::BELONGS_TO, 'TblBoard', 'boardID'),
 		);
 	}
 
