@@ -10,12 +10,13 @@ $this->breadcrumbs=array(
 ?>
 
 
-<div class="form">
+
 <fieldset>
 		<legend>Login</legend>
 		<p>Please fill out the following form with your login credentials:</p>
 		<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-			'id'=>'verticalForm',
+			'id'=>'horizontalForm',
+			'type'=>'verticle',
 			'enableClientValidation'=>true,
 			'clientOptions'=>array(
 				'validateOnSubmit'=>true,
@@ -30,17 +31,28 @@ $this->breadcrumbs=array(
 		    
 		    <?php echo $form->passwordFieldRow($model,'password'); ?>
 			<?php echo $form->error($model,'password'); ?>
-		
-			<?php echo $form->checkBoxRow($model,'rememberMe'); ?>
-			<?php echo $form->error($model,'rememberMe'); ?>
-		
-			<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login')); ?>
+			</br>
+			<p>
+			<?php echo CHtml::link('Forget your password?',array('//user/recovery'));
+				  echo ' | ';
+			?>
 			
 			<?php echo CHtml::link('Register?',array('//user/create'));?>
+
+			</p>
+			
+			</br>
+			<?php echo $form->checkBoxRow($model,'rememberMe'); ?>
+			<?php echo $form->error($model,'rememberMe'); ?>
+			</br>
+		
+			<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit','type'=>'primary', 'label'=>'Login')); ?>
+			
+			
 			
 	
 </fieldset>
 <?php $this->endWidget(); ?>
 
 
-</div><!-- form -->
+

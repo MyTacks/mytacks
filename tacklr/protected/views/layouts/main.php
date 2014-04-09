@@ -22,7 +22,8 @@
 	</div><!-- header -->
 
 	    
-	<?php $this->widget('bootstrap.widgets.TbNavbar', array(
+	<?php
+	$this->widget('bootstrap.widgets.TbNavbar', array(
 	    'type'=> null ,
 	    'brand'=>'Tacklr',
 	    'brandUrl'=> array('/site/index'),
@@ -38,7 +39,8 @@
 	            ),
 	        ),
 	    ),
-	)); ?>
+	)); 
+	?>
 
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(

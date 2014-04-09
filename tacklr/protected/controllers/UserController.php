@@ -27,8 +27,8 @@ class UserController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create','activate'),
+			array('allow',  // allow all users to perform 'index', 'view', 'create', 'activate' actions
+				'actions'=>array('index','view','create','activate','recovery','changepassword'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -56,6 +56,24 @@ class UserController extends Controller
 		));
 	}
 	
+	/**
+	 * Forget password view
+	 */
+	public function actionForget()
+	{
+		$model=new ForgetPassword;
+		
+		if(isset($_POST['ForgetPassword']))
+		{
+			echo "<br\> <br\><br\><br\><br\><br\>Email has been sent!!!";
+		}
+		
+		$this->render('forget',array(
+				'model'=>$model,
+		));
+		
+	}
+	
 	
 	/**
 	 * Creates a new model.
@@ -74,23 +92,29 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-		
+			// check the availability of username and email 
 			if(User::model()->exists('username=:username',array('username'=>$model->username)))
 			{
 					echo 'User already exists';
+					$model->addError('username', 'Username already exists!');
 					//$this->redirect('/mytacks/tacklr/user/create');
-            		return;
+					return;
 			}
-       
-
+			if (User::model()->findByAttributes(array('email'=>$model->email)))
+			{
+				echo 'Email already exists';
+				$model->addError('email', 'Email already exists!');
+				return;
+			}
+					
 			$model->groupID = 2;
 			$model->active = 0;
 			$model->updateDate = $timeStamp;
 			$model->joinDate = $timeStamp;
-			$model->activeKey = crypt($model->username.$rnd);
+			$model->activeKey = str_replace('.','p',crypt($model->username.$rnd));
 			$activationUrl = Yii::app()->getBaseUrl(true).'/user/activate?id='.$model->activeKey;
 			$uploadedFile=CUploadedFile::getInstance($model,'imageURL'); // get the file name to be uploaded
-
+			
             if($uploadedFile)
             {
                 $fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
@@ -103,8 +127,11 @@ class UserController extends Controller
 			$model->password =crypt($model->password,$model->activeKey);
 			if($model->save())
 			{
-				$this->sendActivatioEmail($activationUrl, $model->email);
-				$this->redirect(array('view','id'=>$model->userID));
+				$title = "Tacklr Account Activation";
+				$subject = "Welcome to Tacklr";
+				$action = "activate your account";
+				$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);
+				$this->redirect(Yii::app()->homeUrl);
 			}
 				
 		}
@@ -125,20 +152,15 @@ class UserController extends Controller
 		$model= User::model()->findByAttributes(array('activeKey'=>$id));
 		if($model === null)
 		{
-			
-			echo 'can not find username';
-			//$url = $this->createUrl('//registration/activation_failure.php');
-			//$this->redirect($url);
+			$this->redirect(Yii::app()->homeUrl);
 		}
 		else
 		{
 			$model->active = 1;
 			if ($model->update())
-				echo 'Here you are'. $model->username;
-			else
-				echo 'fail to activate'. $model->username;
-			//$url = $this->createUrl('//registration/activation_failure.php');
-			//$this->redirect($url);
+			{
+				$this->redirect(Yii::app()->createUrl('site/login'));
+			}
 		}
 		//	
 	}
@@ -167,7 +189,65 @@ class UserController extends Controller
 			'model'=>$model,
 		));
 	}
-
+	
+	/** 
+	 * Display the recovery password form to create a change password activation link
+	 * 
+	 */
+	public function actionRecovery()
+	{
+		$rnd = rand(0,9999);  // generate random number between 0-9999
+		$model = new RecoveryForm;
+		
+		if (isset($_POST['RecoveryForm']))
+		{
+			$model->attributes = $_POST['RecoveryForm'];
+			if ($model->validate())
+			{
+				$activationkey = str_replace('.','p',crypt($model->email.$rnd));
+				$activationUrl = Yii::app()->getBaseUrl(true).'/user/changepassword?id='.$activationkey;
+				if ($model->checkExists($activationkey))
+				{
+					$title = "Tacklr Password Recovery";
+					$subject = "Tacklr Password Recover";
+					$action = "recover your password";
+					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);
+					$this->redirect(Yii::app()->homeUrl);
+				}
+			}
+		}
+		$this->render('recovery', array('model'=>$model));
+		
+	}
+	/**
+	 * 
+	 */
+	public function actionChangePassword($id)
+	{
+		$model=new ChangePasswordForm;
+		$model->setActivationKey($id);
+		if(isset($_POST['ChangePasswordForm']))
+		{
+			$model->attributes=$_POST['ChangePasswordForm'];
+			if($model->validate())
+			{
+				$user= User::model()->findByAttributes(array('activeKey'=>$model->activationKey));
+				if($user === null)
+				{
+					$model->addError('password', 'Invalid activation key!');
+				}
+				else
+				{
+					$user->password = crypt($model->password,$model->activationKey);
+					if ($user->update())
+					{
+						 $this->redirect(Yii::app()->createUrl('site/login'));
+					}
+				}
+			}
+		}
+		$this->render('changepassword',array('model'=>$model));
+	}
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -241,27 +321,27 @@ class UserController extends Controller
 	 * @param activateURL is link used to activate user account
 	 * @param sendTo is the email of user
 	 */
-	public function sendActivatioEmail($activateUrl,$sendTo)
+	public function sendActivatioEmail( $title, $subject, $action, $activateUrl, $sendTo)
 	{
 		$email = new YiiMailer();
 		$message = "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 		<html>
 			<head>
 				<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-				<title>Tacklr Account Activation</title>
+				<title>$title</title>
 			</head>
 			<body>
-				<div style='width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 11px;'>
-						<h1>Welcome to Tacklr.</h1>
+				<div style='width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 14px;'>
+						<h1>$title</h1>
 						<div align='center'>
 						</div>
-						<p>Click the following link to activate your account</strong>.</p>
+						<p>Click the following link to $action</strong>.</p>
 						<p>$activateUrl</p>
 				</div>
 			</body>
 		</html>";
 		$email->setBody($message);
-		$email->setSubject = 'Welcome to Tacklr.';
+		$email->setSubject = $subject;
 		$email->setTo($sendTo);
 			
 		if (!$email->send()) 
