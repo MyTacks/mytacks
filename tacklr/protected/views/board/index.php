@@ -21,9 +21,8 @@ $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
 ?>
 
-<h1>Boards</h1>
+<h1 xmlns="http://www.w3.org/1999/html">Boards</h1>
 <div id='boards'>
-    boards
 
 </div>
 
@@ -33,8 +32,29 @@ $UID = ($user_in_db['userID']);
 //echo $UID;
 $boards = Board::model()->findAllByAttributes( array('userID'=>(int)$UID));
 
+
+?>
+<div class="row">
+    <div class="span12">
+        <ul class="thumbnails">
+<?php
 foreach ($boards as $board)
 {
-    echo CHtml::button($board['boardTitle'], array('onclick' => 'js:document.location.href="board/view?&id='.$board['boardID'].'"'));
+    //echo CHtml::button($board['boardTitle'], array('onclick' => 'js:document.location.href="board/view?&id='.$board['boardID'].'"'));
+    ?>
+    <li class="span4">
+       <!-- <div class="col-sm-6 col-md-3"> -->
+            <a href="board/view?&id=<?php echo $board['boardID']; ?>" class="thumbnail">
+                <!-- <img src="holder.js/300x200" alt=""> -->
+                <div class="caption">
+                    <h3> <?php echo $board['boardTitle'] ?></h3>
+                </div>
+            </a>
+        <!-- </div> -->
+    </li>
+<?php
 }
-//echo 'make_new_tack(\'boards\',"'.$board['boardTitle'].'","'.$board['description'].'","'.$board['updateDate'].'");';
+?>
+            </ul>
+        </div>
+    </div>

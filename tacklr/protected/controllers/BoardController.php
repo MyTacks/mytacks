@@ -31,12 +31,12 @@ class BoardController extends Controller
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+			array('allow', // allow authenticated user to perform 'create', 'update' and 'delete' actions
+				'actions'=>array('create','update','delete'),
 				'users'=>array('@'),
 			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+			array('allow', // allow admin user to perform 'admin' actions
+				'actions'=>array('admin'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -63,6 +63,10 @@ class BoardController extends Controller
 	public function actionCreate()
 	{
 		$model=new Board;
+        $pst = new DateTimeZone('America/Los_Angeles');
+        $date = new DateTime();
+        $date->setTimezone($pst);
+        $timeStamp = $date->format('Y-m-d H:i:s');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -70,6 +74,12 @@ class BoardController extends Controller
 		if(isset($_POST['Board']))
 		{
 			$model->attributes=$_POST['Board'];
+
+            $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
+            $UID = ($user_in_db['userID']);
+            $model->userID = $UID;
+            $model->createDate = $timeStamp;
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->boardID));
 		}

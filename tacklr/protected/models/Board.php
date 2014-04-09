@@ -36,7 +36,7 @@ class Board extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('boardTitle, updateDate', 'required'),
+			array('boardTitle, description, categoryID', 'required'),
 			array('categoryID', 'numerical', 'integerOnly'=>true),
 			array('boardTitle', 'length', 'max'=>255),
 			array('userID', 'length', 'max'=>20),

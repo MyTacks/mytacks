@@ -135,3 +135,10 @@ INSERT INTO `tbl_user` VALUES (1,1,'admin','admin','Vinh','Nguyen','user/vinh.jp
 						   (2,2,'demo','demo','Demo','User','user/demo.jpg','M',NOW(),'demo@gmail.com','(408)660-7862',0, 'demo',NOW(),NOW()),
 							(3,2,'test','test','Test','User','user/test.jpg','M',NOW(),'test@gmail.com','(408)660-7862',1,'test',NOW(),NOW());
 
+INSERT INTO `tbl_category` VALUES (1, 'Food & Drink', 'Your favorite tacks.', NOW(), NOW()),
+                                  (2, 'Holidays & Events', 'Your favorite tacks.', NOW(), NOW()),
+				  (3, 'Health & Fitness', 'Your favorite tacks.', NOW(), NOW()),
+				  (4, 'Travel', 'Your favorite tacks.', NOW(), NOW()),
+                                  (5, 'Home Decor', 'Your favorite tacks.', NOW(), NOW()),
+				  (6, 'Sports', 'Your favorite tacks.', NOW(), NOW()),
+				  (7, 'Other', 'Your favorite tacks.', NOW(), NOW());

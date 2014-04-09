@@ -126,7 +126,7 @@ class UserController extends Controller
 		if($model === null)
 		{
 			
-			echo 'can not find username';
+			echo 'Can not find username.';
 			//$url = $this->createUrl('//registration/activation_failure.php');
 			//$this->redirect($url);
 		}
@@ -134,9 +134,9 @@ class UserController extends Controller
 		{
 			$model->active = 1;
 			if ($model->update())
-				echo 'Here you are'. $model->username;
+				echo 'Here you are '. $model->username;
 			else
-				echo 'fail to activate'. $model->username;
+				echo 'Fail to activate '. $model->username;
 			//$url = $this->createUrl('//registration/activation_failure.php');
 			//$this->redirect($url);
 		}
