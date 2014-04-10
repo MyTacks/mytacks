@@ -61,6 +61,8 @@ $this->menu=array(
 </h1>
 
 <?php
+$board_in_db = Board::model()->findByAttributes(array('boardID'=>$model->boardID));
+$BID = ($board_in_db['boardID']);
 
     $BID = $model->boardID;
     $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));

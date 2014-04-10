@@ -4,7 +4,8 @@ class TackController extends Controller
 {
 	public function actionCreate()
 	{
-<<<<<<< HEAD
+        $model=new Tack(null);
+
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
         echo "actionCreate";
@@ -49,29 +50,6 @@ class TackController extends Controller
         {
             $this->redirect($this->createUrl('/board/index'));
         }
-=======
-        $model=new Tack;
-
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if(isset($_POST['Tack']))
-        {
-            var_dump($_POST);
-            //echo var_dump($_POST["Tack"]);
-            $model->attributes=$_POST['Tack'];
-            echo "\n\nmodel:";
-            var_dump($model);
-            if($model->save())
-            {
-                $this->redirect(array('../board/view','id'=>$_POST['boardID']));
-            }
-            else
-            {
-                echo "nope";
-            }
-        }
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 	}
 
     /**
@@ -102,6 +80,27 @@ class TackController extends Controller
             return 'text';
         }
     }
+
+    public function actionUpdate()
+    {
+            var_dump($_GET);
+            $feedback = new Feedback;
+            $userId = User::model()->findByAttributes(array('username'=>$_GET['username']))->userID;
+            $feedback->tack_id = $_GET['tackid'];
+            $feedback->owner_id = $userId;
+            $feedback->content = $_GET['comment'];
+            $pst = new DateTimeZone('America/Los_Angeles');
+            $date = new DateTime();
+            $date->setTimezone($pst);
+            $feedback->timestamp = $date->format('Y-m-d H:i:s');
+            
+            echo "\n\n\n";
+            var_dump($feedback);
+
+            $feedback->save();
+            $this->redirect($this->createUrl('/board/view/',array('id'=>$_GET['boardid'])));
+    }
+
 
     public function accessRules()
     {
