@@ -4,7 +4,19 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
+
+<style>
+div.form {
+    width:80%;
+}
+
+.row {
+    width: 100%;
+    padding: 0;
+    position: relative;
+}
+</style>
+
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'board-form',
@@ -14,7 +26,7 @@
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
-
+<div align="center" id="modalForm">
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -39,26 +51,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
-		<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textArea($model,'description',array('rows'=>3, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'description'); ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'updateDate'); ?>
-		<?php echo $form->textField($model,'updateDate'); ?>
-		<?php echo $form->error($model,'updateDate'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'createDate'); ?>
-		<?php echo $form->textField($model,'createDate'); ?>
-		<?php echo $form->error($model,'createDate'); ?>
-	</div>
-
+    <!--
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
+	-->
+</div>
 
 <?php $this->endWidget(); ?>
-
-</div><!-- form -->

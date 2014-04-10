@@ -15,7 +15,7 @@ class BoardController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+            'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -33,11 +33,11 @@ class BoardController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('@'),
+				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -51,7 +51,11 @@ class BoardController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+        if(isset($_POST['Tack']))
+        {
+            var_dump($_POST);
+        }
+        $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}

@@ -1,0 +1,19 @@
+
+.user_tack {
+    position: absolute;
+    color: grey;
+    border: 4px solid darkblue;
+    padding: 6px;
+    overflow: hidden;
+}
+.tack_title {
+    text-align: center;
+}
+.tack_content {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+.tack_feedback {
+    text-align: center;
+}

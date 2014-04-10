@@ -11,7 +11,7 @@ return array(
 	'name'=>'Tacklr',
 	'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
 	// preloading 'log' component
-	'preload'=>array('log'),
+	'preload'=>array('log', 'Yiitube'),
 
 	// autoloading model and component classes
 	'import'=>array(
@@ -46,10 +46,8 @@ return array(
             'clientScript'=>array(
                 'packages'=>array(
                     'jquery'=>array(
-//                        'baseUrl'=>dirname(__FILE__)."../../../",
-//                        'js'=>array('js/jquery-1.10.2.js',
- //                           'js/jquery-ui-1.10.4.custom.js',
-   //                         'js/jquery-ui-1.10.4.custom.min.js'),
+                       //'baseUrl'=>dirname(__FILE__)."../../../",
+                       // 'js'=>array('js/tack_generator.js',)
                     ),
                 ),
             ),
@@ -71,7 +69,11 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
-	
+
+        'Yiitube'=>array(
+            'class'=>'ext.Yiitube.Yiitube',
+        ),
+
 		'bootstrap'=>array(
             'class'=>'bootstrap.components.Bootstrap',
         ),

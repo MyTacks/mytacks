@@ -4,7 +4,27 @@ class TackController extends Controller
 {
 	public function actionCreate()
 	{
-		$this->render('create');
+        $model=new Tack;
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if(isset($_POST['Tack']))
+        {
+            var_dump($_POST);
+            //echo var_dump($_POST["Tack"]);
+            $model->attributes=$_POST['Tack'];
+            echo "\n\nmodel:";
+            var_dump($model);
+            if($model->save())
+            {
+                $this->redirect(array('../board/view','id'=>$_POST['boardID']));
+            }
+            else
+            {
+                echo "nope";
+            }
+        }
 	}
 
 	public function actionDelete()
