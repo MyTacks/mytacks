@@ -9,31 +9,37 @@ Yii::app()->clientScript->registerCoreScript('jquery');
 
 $cs = Yii::app()->getClientScript();
 $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
+$cs->registerScriptFile($baseUrl.'/js/jquery.js');
 ?>
 
-<div class="form">
+<?php $this->beginWidget(
+    'bootstrap.widgets.TbModal',
+    array('id' => 'newTack')
+); ?>
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'tack-form',
-    'action'=>'/mytacks/tacklr/tack/create',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>true,
-)); ?>
+    <div class="modal-header" align="center">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h4>New tack</h4>
+    </div>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+    <div class="modal-body" align="center">
+        <div class="form">
+            <?php $form=$this->beginWidget('CActiveForm', array(
+                'id'=>'tack-form',
+                'action'=>'/mytacks/tacklr/tack/create',
+                // Please note: When you enable ajax validation, make sure the corresponding
+                // controller action is handling ajax validation correctly.
+                // There is a call to performAjaxValidation() commented in generated controller code.
+                // See class documentation of CActiveForm for details on this.
+                'enableAjaxValidation'=>false,
+            )); ?>
 
-	<?php echo $form->errorSummary($model); ?>
+            <p class="note">Fields with <span class="required">*</span> are required.</p>
 
+<<<<<<< HEAD
 	<div class="row">
 		<?php echo $form->labelEx($model,'tackName'); ?>
-<<<<<<< HEAD
-		<?php echo $form->textArea($model,'tackName',array('size'=>60,'maxlength'=>255)); ?>
-=======
 		<?php echo $form->textField($model,'tackName',array('size'=>60, 'maxLength'=>50)); ?>
->>>>>>> Intermediate checkin: basic tack functionality in-place.
 		<?php echo $form->error($model,'tackName'); ?>
 	</div>
 
@@ -48,13 +54,24 @@ $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
 		<?php echo $form->textField($model,'imageURL',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'imageURL'); ?>
 	</div>
+=======
+            <?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'tackDescription'); ?>
-		<?php echo $form->textArea($model,'tackDescription',array('rows'=>3, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'tackDescription'); ?>
-	</div>
 
+            <div class="row">
+                <?php echo $form->labelEx($model,'tackName'); ?>
+                <?php echo $form->textField($model,'tackName',array('size'=>60, 'maxLength'=>50)); ?>
+                <?php echo $form->error($model,'tackName'); ?>
+            </div>
+>>>>>>> Intermediate Checkin
+
+            <div class="row">
+                <?php echo $form->labelEx($model,'tackContent'); ?>
+                <?php echo $form->textField($model,'tackContent',array('size'=>60,'maxlength'=>255)); ?>
+                <?php echo $form->error($model,'tackContent'); ?>
+            </div>
+
+<<<<<<< HEAD
     <div class="row">
         <?php echo $form->labelEx($model,'isPrivate'); ?>
         <?php echo $form->dropDownList($model,'isPrivate', $model->getIsPrivateOptions(), array('empty' => 'Choose')); ?>
@@ -62,16 +79,56 @@ $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
     </div>
 
 	<div class="row buttons">
-<<<<<<< HEAD
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-=======
-		<?php var_dump($this); echo CHtml::submitButton( ($model->isNewRecord ? 'create' : 'Save'), array('type'=>'input','onclick'=>'js:adduser()')) ?>
->>>>>>> Intermediate checkin: basic tack functionality in-place.
 	</div>
+=======
+            <div class="row">
+                <?php echo $form->labelEx($model,'tackDescription'); ?>
+                <?php echo $form->textArea($model,'tackDescription',array('rows'=>3, 'cols'=>50)); ?>
+                <?php echo $form->error($model,'tackDescription'); ?>
+            </div>
+>>>>>>> Intermediate Checkin
 
+            <div class="row buttons">
+                <?php echo CHtml::submitButton( ($model->isNewRecord ? 'create' : 'Save')) ?>
+            </div>
+
+            <?php $this->endWidget(); ?>
+        </div>
+    </div><!-- form -->
+
+
+    <div class="modal-footer" align="center">
+       <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'buttonType' => 'submit',
+                'type' => 'primary',
+                'label' => 'Save Tack',
+                'url' => array('/view/', 'save', 'tack'=>$model)
+            )
+        ); ?>
+    </div>
 <?php $this->endWidget(); ?>
-</div><!-- form -->
+<<<<<<< HEAD
 
+=======
+
+<?php $this->widget(
+    'bootstrap.widgets.TbButton',
+    array(
+        'label' => '+',
+        'type' => 'primary',
+        'htmlOptions' => array(
+            'data-toggle' => 'modal',
+            'data-target' => '#newTack',
+        ),
+    )
+);
+?>
+
+
+<!--
 <script type="text/javascript">
     function adduser($user, $board) {
         var user = $("<input>")
@@ -85,3 +142,5 @@ $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
         $('#tack-form').append($(input));
     }
 </script>
+-->
+>>>>>>> Intermediate Checkin

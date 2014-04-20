@@ -19,14 +19,108 @@ $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 
 // register tack css
 $cs->registerCssFile($baseUrl.'/css/user_tack.css');
+?>
 
+<?php $this->beginWidget(
+    'bootstrap.widgets.TbModal',
+    array('id' => 'newTack')
+); ?>
+
+<div class="modal-header" align="center">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h4>New tack</h4>
+    <?php
+        $new_tack = new Tack(null);
+    ?>
+</div>
+
+<div class="modal-body" align="center">
+    <div class="form">
+        <?php $form=$this->beginWidget('CActiveForm', array(
+            'id'=>'tack-form',
+            'action'=>'/mytacks/tacklr/tack/create/',
+            'method'=>'post',
+            // Please note: When you enable ajax validation, make sure the corresponding
+            // controller action is handling ajax validation correctly.
+            // There is a call to performAjaxValidation() commented in generated controller code.
+            // See class documentation of CActiveForm for details on this.
+            'enableAjaxValidation'=>false,
+        )); ?>
+
+        <p class="note">Fields with <span class="required">*</span> are required.</p>
+
+        <?php echo $form->errorSummary($new_tack); ?>
+
+
+        <div class="row">
+            <?php echo $form->labelEx($new_tack,'tackName'); ?>
+            <?php echo $form->textField($new_tack,'tackName',array('size'=>60, 'maxLength'=>50)); ?>
+            <?php echo $form->error($new_tack,'tackName'); ?>
+        </div>
+
+        <div class="row">
+            <?php echo $form->labelEx($new_tack,'tackContent'); ?>
+            <?php echo $form->textField($new_tack,'tackContent',array('size'=>60,'maxlength'=>255)); ?>
+            <?php echo $form->error($new_tack,'tackContent'); ?>
+        </div>
+
+        <div class="row">
+            <?php echo $form->labelEx($new_tack,'tackDescription'); ?>
+            <?php echo $form->textArea($new_tack,'tackDescription',array('rows'=>3, 'cols'=>50)); ?>
+            <?php echo $form->error($new_tack,'tackDescription'); ?>
+        </div>
+        <div class="hidden">
+            <?php echo $form->hiddenField($new_tack, 'userID', array('value'=>$model->userID)); ?>
+            <?php echo $form->hiddenField($new_tack, 'boardID', array('value'=>$model->boardID)); ?>
+            <?php echo $form->hiddenField($new_tack, 'isPrivate', array('value'=>0)); ?>
+        </div>
+
+        <div class="row buttons">
+            <?php echo CHtml::submitButton( ($new_tack->isNewRecord ? 'create' : 'Save'), array('boardID'=>$model->boardID,'userID'=>$model->userID)); ?>
+        </div>
+
+        <?php $this->endWidget(); ?>
+    </div>
+</div><!-- form -->
+
+
+<div class="modal-footer" align="center">
+    <?php $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'submit',
+            'type' => 'primary',
+            'label' => 'Save Tack',
+            'url' => array('/view/', 'save', 'tack'=>$new_tack)
+        )
+    ); ?>
+</div>
+<?php $this->endWidget(); ?>
+
+<?php
 $this->menu=array(
-    array('label'=>'Create Tack', 'url'=>array('tack/create', 'boardID'=>$model->boardID)),
 	array('label'=>'Update Board', 'url'=>array('update', 'id'=>$model->boardID)),
+	array('label'=>'Delete Board', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->boardID),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Manage Board', 'url'=>array('admin')),
+    //array('label'=>'New Tack', 'url'=>array('#', 'htmlOptions'=>array('data-target' => 'newTack')))
+);
+?>
+<div id="create_tack" align="right">
+<?php $this->widget(
+    'bootstrap.widgets.TbButton',
+    array(
+        'label' => 'Add Tack',
+        'type' => 'primary',
+        'htmlOptions' => array(
+            'data-toggle' => 'modal',
+            'data-target' => '#newTack',
+        ),
+    )
 	array('label'=>'Delete Board', 'url'=>array('delete', 'id'=>$model->boardID)),
     array('label'=>'List Boards', 'url'=>array('index')),
 );
 ?>
+</div>
 
 <h1>Board: <?php echo $model->boardTitle; ?></h1>
 

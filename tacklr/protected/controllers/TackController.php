@@ -4,57 +4,76 @@ class TackController extends Controller
 {
 	public function actionCreate()
 	{
-        $model=new Tack;
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
+        echo "actionCreate";
+        //var_dump($_POST);
+        //if (true) return;
+        if(!isset($_POST['Tack']))
+        {
+            $this->redirect(array('/board/'));
+        }
+
+        $boardID = $_POST['Tack']['boardID'];
+
+        $tack_type = $this->deduceTackType($_POST['Tack']['tackContent']);
+        $model = new Tack($tack_type);
 
         if(isset($_POST['Tack']))
         {
-            var_dump($_POST);
+            $pst = new DateTimeZone('America/Los_Angeles');
+            $date = new DateTime();
+            $date->setTimezone($pst);
+            $timeStamp = $date->format('Y-m-d H:i:s');
             //echo var_dump($_POST["Tack"]);
             $model->attributes=$_POST['Tack'];
-            echo "\n\nmodel:";
-            var_dump($model);
-            if($model->save())
+            $model['boardID'] = intval($model['boardID'] );
+            $model['userID'] = intval($model['userID'] );
+            $model['isPrivate'] = intval($model['isPrivate'] );
+            $model['updateDate'] = $timeStamp;
+            $save = $model->save(false);
+            if($save)
             {
-                $this->redirect(array('../board/view','id'=>$_POST['boardID']));
+                echo $save;
+                echo "errors".var_dump($model->getErrors());
+                //$this->redirect(array('/board/view?&id='.$boardID));
             }
             else
             {
+                echo "is new record".$model->getIsNewRecord();
+                echo "errors".var_dump($model->getErrors());
+                echo "save attempt".$save;
                 echo "nope";
             }
         }
+        else
+        {
+            $this->redirect(array('/board/'));
+        }
 	}
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-        $pst = new DateTimeZone('America/Los_Angeles');
-        $date = new DateTime();
-        $date->setTimezone($pst);
-        $timeStamp = $date->format('Y-m-d H:i:s');
+    public function deduceTackType($content)
+    {
+        if(strpos($content, "youtube") !== false)
+        {
+            return 'ext.Yiitube';
+        }
+        else if(strpos($content, ".jpg") !== false
+            || strpos($content, ".img") !== false
+            || strpos($content, ".jpg"))
+        {
+            return 'image';
+        }
+        else if(filter_var($content, FILTER_VALIDATE_URL))
+        {
+            return 'url';
+        }
+        else
+        {
+            return 'text';
+        }
+    }
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Tack']))
-		{
-			$model->attributes=$_POST['Tack'];
-            $model->updateDate = $timeStamp;
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->tackID));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
 
 	/**
 	 * Deletes a particular model.

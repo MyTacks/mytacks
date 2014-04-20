@@ -2,127 +2,88 @@
 
 class TackController extends Controller
 {
-	/**
-	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
-	 * using two-column layout. See 'protected/views/layouts/column2.php'.
-	 */
-	public $layout='//layouts/column2';
-
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
+	public function actionCreate()
 	{
-<<<<<<< HEAD
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			//'postOnly + delete', // we only allow deletion via POST request
-		);
-=======
-        $model=new Tack;
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
+        echo "actionCreate";
+        //var_dump($_POST);
+        //if (true) return;
+        if(!isset($_POST['Tack']))
+        {
+            $this->redirect(array('/board/'));
+        }
+
+        $boardID = $_POST['Tack']['boardID'];
+
+        $tack_type = $this->deduceTackType($_POST['Tack']['tackContent']);
+        $model = new Tack($tack_type);
 
         if(isset($_POST['Tack']))
         {
-            var_dump($_POST);
+            $pst = new DateTimeZone('America/Los_Angeles');
+            $date = new DateTime();
+            $date->setTimezone($pst);
+            $timeStamp = $date->format('Y-m-d H:i:s');
             //echo var_dump($_POST["Tack"]);
             $model->attributes=$_POST['Tack'];
-            echo "\n\nmodel:";
-            var_dump($model);
-            if($model->save())
+            $model['boardID'] = intval($model['boardID'] );
+            $model['userID'] = intval($model['userID'] );
+            $model['isPrivate'] = intval($model['isPrivate'] );
+            $model['updateDate'] = $timeStamp;
+            $save = $model->save(false);
+            if($save)
             {
-                $this->redirect(array('../board/view','id'=>$_POST['boardID']));
+                echo $save;
+                echo "errors".var_dump($model->getErrors());
+                //$this->redirect(array('/board/view?&id='.$boardID));
             }
             else
             {
+                echo "is new record".$model->getIsNewRecord();
+                echo "errors".var_dump($model->getErrors());
+                echo "save attempt".$save;
                 echo "nope";
             }
         }
->>>>>>> Intermediate checkin: basic tack functionality in-place.
+        else
+        {
+            $this->redirect(array('/board/'));
+        }
 	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-            array('allow', // allow authenticated user to perform 'delete' actions
-                'actions'=>array('delete'),
-                'users'=>array('@'),
-            ),
-			array('allow', // allow admin user to perform 'admin' actions
-				'actions'=>array('admin'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate($boardID)
-	{
-		$model=new Tack;
-        $pst = new DateTimeZone('America/Los_Angeles');
-        $date = new DateTime();
-        $date->setTimezone($pst);
-        $timeStamp = $date->format('Y-m-d H:i:s');
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Tack']))
-		{
-			$model->attributes=$_POST['Tack'];
-
-            $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
-            $UID = ($user_in_db['userID']);
-            $model->userID = $UID;
-            $model->boardID = $boardID;
-            $model->createDate = $timeStamp;
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->tackID));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
-
+<<<<<<< HEAD
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
 	public function actionUpdate($id)
+=======
+    public function deduceTackType($content)
+    {
+        if(strpos($content, "youtube") !== false)
+        {
+            return 'ext.Yiitube';
+        }
+        else if(strpos($content, ".jpg") !== false
+            || strpos($content, ".img") !== false
+            || strpos($content, ".jpg"))
+        {
+            return 'image';
+        }
+        else if(filter_var($content, FILTER_VALIDATE_URL))
+        {
+            return 'url';
+        }
+        else
+        {
+            return 'text';
+        }
+    }
+
+	public function actionDelete()
+>>>>>>> Intermediate Checkin
 	{
 		$model=$this->loadModel($id);
         $pst = new DateTimeZone('America/Los_Angeles');

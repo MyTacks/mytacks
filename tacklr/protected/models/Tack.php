@@ -61,7 +61,7 @@ class Tack extends CActiveRecord
 		return array(
 			array('tackName, tackURL, tackDescription, updateDate', 'required'),
 			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
-			array('userID', 'length', 'max'=>20),
+			array('userID', 'numerical'),
             array('tackURL', 'length', 'max'=>255),
             array('tackType', 'length', 'max'=>255),
 			array('createDate', 'safe'),
