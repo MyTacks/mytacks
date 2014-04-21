@@ -134,6 +134,7 @@ class BoardController extends Controller
         {
             $this->redirect(array('index'));
         }
+        $this->redirect(array('board'));
 	}
 
 	/**

@@ -140,7 +140,13 @@ class Tack extends CActiveRecord
         $html .= "<a href=tackURL><h5>Link</h5></a></div>";
         return $html;
         */
-        $pre = "<div class='user_tack' onclick='setOnTop()' id='".$this->tackID."' style=' position:relative;'>\n";
+        $pre = "<div class='user_tack' onclick='setOnTop()' id='".$this->tackID."' style=' position:relative;";
+
+            if($this->has_widget())
+            {
+                //$pre .= 'width:560px';
+            }
+        $pre  .= "'>\n";
         if($isOwner)
         {
             $pre .=  CHtml::link('X',array('tack/delete', 'id'=>$this->tackID));

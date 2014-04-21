@@ -109,21 +109,24 @@ $this->menu=array(
 );
 ?>
 <div id="create_tack" align="right">
-<?php $this->widget(
-    'bootstrap.widgets.TbButton',
-    array(
-        'label' => 'Add Tack',
-        'type' => 'primary',
-        'htmlOptions' => array(
-            'data-toggle' => 'modal',
-            'data-target' => '#newTack',
-        ),
-    )
-);
-?>
+
 </div>
 
-<h1 align="center"><?php echo $model->boardTitle; ?></h1>
+<h1 align="center">
+    <?php echo $model->boardTitle; ?>
+    <?php $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'label' => 'Add Tack',
+            'type' => 'primary',
+            'htmlOptions' => array(
+                'data-toggle' => 'modal',
+                'data-target' => '#newTack',
+            ),
+        )
+    );
+    ?>
+</h1>
 
 <?php
 
@@ -141,7 +144,7 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
         <ul class="thumbnails">
             <?php foreach ($tacks as $tack): ?>
                 <li class="span4">
-                    <!--<div class="drag">-->
+                    <div class="drag">
                         <div class="thumbnail">
                             <?php
                                 $tackHtml = $tack->toHtml($isOwner);
@@ -157,7 +160,7 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
                                 echo $tackHtml['postContent'];
                             ?>
                         </div>
-                    <!--</div>-->
+                    </div>
                 </li>
             <?php endforeach ?>
         </ul>
@@ -167,8 +170,8 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
 <script type="text/javascript">
 
     $( document).ready(function() {
-        $('.thumbnail').draggable();
-        $('.thumbnail').resizable();
+        $('.drag').draggable();
+        $('.drag').resizable();
     });
 
     maxZ = 1;
