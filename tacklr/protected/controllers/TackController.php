@@ -58,11 +58,11 @@ class TackController extends Controller
         }
         else if(strpos($content, ".jpg") !== false
             || strpos($content, ".img") !== false
-            || strpos($content, ".jpg"))
+            || strpos($content, ".pdf") !== false)
         {
             return 'image';
         }
-        else if(filter_var($content, FILTER_VALIDATE_URL))
+        else if(strpos($content,".com") !== false || filter_var($content, FILTER_VALIDATE_URL))
         {
             return 'url';
         }

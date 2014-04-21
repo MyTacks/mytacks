@@ -177,9 +177,15 @@ class Tack extends CActiveRecord
         {
             return '<a href='.$this->tackURL.'><img class="tack_content" src='.$this->tackURL.' /></a>';
         }
-        else
+        else if ($this->tackType == 'url')
         {
             return '<div class="tack_content" align="center"><a href='.$this->tackURL.'>'.$this->tackName.'</a></div>';
+        }
+        else
+        {
+            $html = '<p><div class="tack_content" align="center">'.$this->tackURL.'</div></p>';
+            $html .= '<p><div class="tack_content" align="center">'.$this->tackDescription.'</div></p>';
+            return $html;
         }
     }
 

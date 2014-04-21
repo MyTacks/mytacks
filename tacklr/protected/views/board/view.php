@@ -82,9 +82,9 @@ $cs->registerCssFile($baseUrl.'/css/user_tack.css');
     </div>
 </div><!-- form -->
 
-
+<!---
 <div class="modal-footer" align="center">
-    <?php $this->widget(
+    <?php /*$this->widget(
         'bootstrap.widgets.TbButton',
         array(
             'buttonType' => 'submit',
@@ -92,8 +92,10 @@ $cs->registerCssFile($baseUrl.'/css/user_tack.css');
             'label' => 'Save Tack',
             'url' => array('/view/', 'save', 'tack'=>$new_tack)
         )
-    ); ?>
+    ); */?>
+
 </div>
+-->
 <?php $this->endWidget(); ?>
 
 <?php
@@ -163,43 +165,15 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
 </div>
 
 <script type="text/javascript">
+
     $( document).ready(function() {
         $('.thumbnail').draggable();
         $('.thumbnail').resizable();
     });
 
-    function setOnTop() {
-        $(this).css("z-index", $(this).css("z-index")*2 + 2);
-    }
+    maxZ = 1;
+    $(".user_tack").click(function setOnTop() {
+        $(this).css("z-index", maxZ + 1);
+        maxZ += 1;
+    });
 </script>
-
-
-<?php $this->beginWidget(
-    'bootstrap.widgets.TbModal',
-    array('id' => 'newTack')
-); ?>
-
-
-    <div class="modal-header" align="center">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h4>New tack</h4>
-    </div>
-
-    <div class="modal-body" align="center">
-        <?php $this->renderPartial('../Tack/_form', array('model'=>new Tack(null))); ?>
-    </div>
-    <!--
-    <div class="modal-footer">
-       <?php /* $this->widget(
-            'bootstrap.widgets.TbButton',
-            array(
-                'buttonType' => 'button',
-                'type' => 'primary',
-                'label' => 'Save changes',
-                'url' => '/view/'
-            )
-        ); */?>
-    </div>
-    -->
-
-<?php $this->endWidget(); ?>
