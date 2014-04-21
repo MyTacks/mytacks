@@ -16,7 +16,7 @@ class TackController extends Controller
 
         $boardID = $_POST['Tack']['boardID'];
 
-        $tack_type = $this->deduceTackType($_POST['Tack']['tackContent']);
+        $tack_type = $this->deduceTackType($_POST['Tack']['tackURL']);
         $model = new Tack($tack_type);
 
         if(isset($_POST['Tack']))
@@ -27,16 +27,14 @@ class TackController extends Controller
             $timeStamp = $date->format('Y-m-d H:i:s');
             //echo var_dump($_POST["Tack"]);
             $model->attributes=$_POST['Tack'];
-            $model['boardID'] = intval($model['boardID'] );
-            $model['userID'] = intval($model['userID'] );
-            $model['isPrivate'] = intval($model['isPrivate'] );
-            $model['updateDate'] = $timeStamp;
-            $save = $model->save(false);
+            $model->updateDate = $timeStamp;
+            $save = $model->insert();
+            //var_dump($model);
             if($save)
             {
-                echo $save;
-                echo "errors".var_dump($model->getErrors());
-                //$this->redirect(array('/board/view?&id='.$boardID));
+                //echo $save;
+                //echo "errors".var_dump($model->getErrors());
+                $this->redirect($this->createUrl('/board/view/',array('id'=>$boardID)));
             }
             else
             {
@@ -48,7 +46,7 @@ class TackController extends Controller
         }
         else
         {
-            $this->redirect(array('/board/'));
+            $this->redirect($this->createUrl('/board/index'));
         }
 	}
 
@@ -74,6 +72,30 @@ class TackController extends Controller
         }
     }
 
+    public function accessRules()
+    {
+        return array(
+            array('allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=>array('index','view'),
+                'users'=>array('*'),
+            ),
+            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                'actions'=>array('create','update'),
+                'users'=>array('*'),
+            ),
+            array('allow', // allow authenticated user to perform 'delete' actions
+                'actions'=>array('delete'),
+                'users'=>array('@'),
+            ),
+            array('allow', // allow admin user to perform 'admin' actions
+                'actions'=>array('admin'),
+                'users'=>array('admin'),
+            ),
+            array('deny',  // deny all users
+                'users'=>array('*'),
+            ),
+        );
+    }
 
 	/**
 	 * Deletes a particular model.
@@ -83,7 +105,7 @@ class TackController extends Controller
 	public function actionDelete($id)
 	{
         $BID = $this->loadModel($id)->boardID;
-		$this->loadModel($id)->delete();
+        Tack::model()->deleteByPk($id);
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))

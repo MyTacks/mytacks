@@ -38,7 +38,6 @@ $cs->registerScriptFile($baseUrl.'/js/jquery.js');
 
             <?php echo $form->errorSummary($model); ?>
 
-
             <div class="row">
                 <?php echo $form->labelEx($model,'tackName'); ?>
                 <?php echo $form->textField($model,'tackName',array('size'=>60, 'maxLength'=>50)); ?>
@@ -46,14 +45,19 @@ $cs->registerScriptFile($baseUrl.'/js/jquery.js');
             </div>
 
             <div class="row">
-                <?php echo $form->labelEx($model,'tackContent'); ?>
-                <?php echo $form->textField($model,'tackContent',array('size'=>60,'maxlength'=>255)); ?>
-                <?php echo $form->error($model,'tackContent'); ?>
+                <?php echo $form->labelEx($model,'tackURL'); ?>
+                <?php echo $form->textField($model,'tackURL',array('size'=>60,'maxlength'=>255)); ?>
+                <?php echo $form->error($model,'tackURL'); ?>
             </div>
             <div class="row">
                 <?php echo $form->labelEx($model,'tackDescription'); ?>
                 <?php echo $form->textArea($model,'tackDescription',array('rows'=>3, 'cols'=>50)); ?>
                 <?php echo $form->error($model,'tackDescription'); ?>
+            </div>
+            <div>
+                <?php echo $form->hiddenField($model, 'userID', array('value'=>$model['userID'])) ?>
+                <?php echo $form->hiddenField($model, 'boardID', array('value'=>$model['boardID'])) ?>
+                <?php echo $form->hiddenField($model, 'isPrivate', array('value'=>false)) ?>
             </div>
 
             <div class="row buttons">

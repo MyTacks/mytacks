@@ -21,27 +21,10 @@
  */
 class Tack extends CActiveRecord
 {
-    public function __construct($type, $board=null, $user=null)
+    public function __construct($type)
     {
+        parent::__construct();
         $this->tackType = $type;
-
-        if($board != null)
-        {
-            $this->boardID = $board;
-        }
-        else if(isset($_POST['boardID']))
-        {
-            $this->boardID = $board;
-        }
-
-        if($user != null)
-        {
-            $this->userID = $user;
-        }
-        else if(isset($_POST['userID']))
-        {
-            $this->userID = $user;
-        }
     }
 	/**
 	 * @return string the associated database table name
@@ -59,15 +42,17 @@ class Tack extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tackName, tackURL, tackDescription, updateDate', 'required'),
+			array('tackName, tackURL, tackDescription', 'required'),
 			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
 			array('userID', 'numerical'),
             array('tackURL', 'length', 'max'=>255),
             array('tackType', 'length', 'max'=>255),
-			array('createDate', 'safe'),
+			//array('createDate, updateDate', 'default',),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
+            array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
+            //array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'insert'),
+            //array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'update'),
 		);
 	}
 
@@ -143,23 +128,64 @@ class Tack extends CActiveRecord
     {
         return $this->tackType;
     }
-    public function to_html()
+    public function toHtml($isOwner=false)
     {
-        $pre = "<div class='user_tack' id='".$this->tackID."' style=' position:relative;'>\n";
+        /*
+        $html = "";
+        if($this->imageURL !== null)
+            $html = "<img src=>".$this->imageURL."</img>";
+
+        $html .= "<div class='caption'>";
+        $html .= "<a tack link>";
+        $html .= "<a href=tackURL><h5>Link</h5></a></div>";
+        return $html;
+        */
+        $pre = "<div class='user_tack' onclick='setOnTop()' id='".$this->tackID."' style=' position:relative;'>\n";
+        if($isOwner)
+        {
+            $pre .=  CHtml::link('X',array('tack/delete', 'id'=>$this->tackID));
+        }
         $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n";
         $pre .= $this->tackName."\n</div>\n";
         /// @todo add tack type! maybe make it widget type...
         $pre .= "\t\t<div class='tack_content'>\n";
-        $html = "";
+        //$html = "";
         $post = "</div>\n<div class='tack_feedback'>\n";
-        $post .= "this tack's feedback</div>";
-        $post  .= "</div>";
-        return array('pre_content'=>$pre, 'content'=>$html, 'post_content'=>$post);
+        $post .= $this->getFeedbackAsHtml()."</div>";
+        $post .= "</div>";
+        return array('preContent'=>$pre, 'content'=>$this->get_widget(), 'postContent'=>$post);
+
+    }
+
+    public function getFeedbackAsHtml()
+    {
+        return "";
+    }
+
+    public function has_widget()
+    {
+        return ($this->tackType == 'ext.Yiitube');
     }
 
     public function get_widget()
     {
-        return array('widget_type'=>$this->tackType, 'widget_params'=>array('v'=>$this->tackURL));
+        if($this->tackType == 'ext.Yiitube')
+        {
+            return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackURL, 'size'=>'small'));
+        }
+        else if ($this->tackType == 'image')
+        {
+            return '<a href='.$this->tackURL.'><img class="tack_content" src='.$this->tackURL.' /></a>';
+        }
+        else
+        {
+            return '<div class="tack_content" align="center"><a href='.$this->tackURL.'>'.$this->tackName.'</a></div>';
+        }
+    }
+
+    public static function youtubeToHref($vid)
+    {
+        return "https://youtube.com/embed/".$vid;
     }
 
     public static function get_css()

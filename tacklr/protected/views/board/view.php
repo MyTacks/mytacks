@@ -7,13 +7,12 @@ $this->breadcrumbs=array(
 	$model->boardID,
 );
 // allow jQuery
-Yii::app()->clientScript->registerCoreScript('jquery');
+//Yii::app()->clientScript->registerCoreScript('jquery');
 $baseUrl = Yii::app()->baseUrl;
 $cs = Yii::app()->getClientScript();
 
 // register js files
-//$cs->registerScriptFile($baseUrl.'/js/jquery.js');
-$cs->registerScriptFile($baseUrl.'/js/jquery-1.10.2.js');
+$cs->registerScriptFile($baseUrl.'/js/jquery.js');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.js');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 
@@ -59,9 +58,9 @@ $cs->registerCssFile($baseUrl.'/css/user_tack.css');
         </div>
 
         <div class="row">
-            <?php echo $form->labelEx($new_tack,'tackContent'); ?>
-            <?php echo $form->textField($new_tack,'tackContent',array('size'=>60,'maxlength'=>255)); ?>
-            <?php echo $form->error($new_tack,'tackContent'); ?>
+            <?php echo $form->labelEx($new_tack,'tackURL'); ?>
+            <?php echo $form->textField($new_tack,'tackURL',array('size'=>60,'maxlength'=>255)); ?>
+            <?php echo $form->error($new_tack,'tackURL'); ?>
         </div>
 
         <div class="row">
@@ -102,6 +101,8 @@ $this->menu=array(
 	array('label'=>'Update Board', 'url'=>array('update', 'id'=>$model->boardID)),
 	array('label'=>'Delete Board', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->boardID),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Board', 'url'=>array('admin')),
+    array('label'=>'Delete Board', 'url'=>array('delete', 'id'=>$model->boardID)),
+    array('label'=>'List Boards', 'url'=>array('index')),
     //array('label'=>'New Tack', 'url'=>array('#', 'htmlOptions'=>array('data-target' => 'newTack')))
 );
 ?>
@@ -116,18 +117,21 @@ $this->menu=array(
             'data-target' => '#newTack',
         ),
     )
-	array('label'=>'Delete Board', 'url'=>array('delete', 'id'=>$model->boardID)),
-    array('label'=>'List Boards', 'url'=>array('index')),
 );
 ?>
 </div>
 
-<h1>Board: <?php echo $model->boardTitle; ?></h1>
+<h1 align="center"><?php echo $model->boardTitle; ?></h1>
 
 <?php
 
 $BID = $model->boardID;
 $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
+$isOwner = false;
+if(User::model()->findByAttributes(array('userID'=>$model->userID))->username == Yii::app()->user->id)
+{
+    $isOwner = true;
+}
 ?>
 
 <div class="row">
@@ -137,12 +141,19 @@ $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
                 <li class="span4">
                     <!--<div class="drag">-->
                         <div class="thumbnail">
-                            <img src="<?php echo $tack['imageURL']; ?>">
-                            <div class="caption">
-                                <a href="/mytacks/tacklr/tack/view/id/<?php echo $tack['tackID']; ?>">
-                                    <h3> <?php echo $tack['tackName'] ?></h3></a>
-                                <a href="<?php echo $tack['tackURL'] ?>"><h5>Link</h5></a>
-                            </div>
+                            <?php
+                                $tackHtml = $tack->toHtml($isOwner);
+                                echo $tackHtml['preContent'];
+                                if($tack->has_widget())
+                                {
+                                    $this->widget($tackHtml['content']['widget_type'], $tackHtml['content']['widget_properties']);
+                                }
+                                else
+                                {
+                                    echo $tackHtml['content'];
+                                }
+                                echo $tackHtml['postContent'];
+                            ?>
                         </div>
                     <!--</div>-->
                 </li>
@@ -153,9 +164,13 @@ $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
 
 <script type="text/javascript">
     $( document).ready(function() {
-        $('.user_tack').draggable();
-        $('.user_tack').resizable();
+        $('.thumbnail').draggable();
+        $('.thumbnail').resizable();
     });
+
+    function setOnTop() {
+        $(this).css("z-index", $(this).css("z-index")*2 + 2);
+    }
 </script>
 
 
@@ -188,16 +203,3 @@ $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
     -->
 
 <?php $this->endWidget(); ?>
-
-<?php $this->widget(
-    'bootstrap.widgets.TbButton',
-    array(
-        'label' => '+',
-        'type' => 'primary',
-        'htmlOptions' => array(
-            'data-toggle' => 'modal',
-            'data-target' => '#newTack',
-        ),
-    )
-);
-?>
