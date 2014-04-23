@@ -21,6 +21,101 @@
  */
 class Tack extends CActiveRecord
 {
+    public static function getCreatorModal($caller, $owner)
+    {     
+
+        $caller->beginWidget(
+            'bootstrap.widgets.TbModal',
+            array('id' => 'newTack')
+        );     
+
+        echo "
+        <div class='modal-header' align='center'>
+            <a class='close' ata-dismiss='modal'>&times;</a>
+            <h4>New tack</h4>
+            ";
+        $new_tack = new Tack(null);
+            
+        echo "
+        </div>
+
+        <div class='modal-body' align='center'>
+            <div class='form'> ";
+            $form=$caller->beginWidget('CActiveForm', array(
+                    'id'=>'tack-form',
+                    'action'=>'/mytacks/tacklr/tack/create/',
+                    'method'=>'post',
+                    // Please note: When you enable ajax validation, make sure the corresponding
+                    // controller action is handling ajax validation correctly.
+                    // There is a call to performAjaxValidation() commented in generated controller code.
+                    // See class documentation of CActiveForm for details on this.
+                    'enableAjaxValidation'=>false,
+                )); 
+                echo
+                "
+                <p class='note'>Fields with <span class='required'>*</span> are required.</p>
+                ";
+
+                echo $form->errorSummary($new_tack);
+
+                echo 
+                "
+                <div class='row'>
+                ";
+                echo $form->labelEx($new_tack,'tackName');
+                echo $form->textField($new_tack,'tackName',array('size'=>60, 'maxLength'=>50));
+                echo $form->error($new_tack,'tackName');
+                echo 
+                "
+                </div>
+                ";
+                echo 
+                "
+                <div class='row'>
+                ";
+                echo $form->labelEx($new_tack,'tackURL');
+                echo $form->textField($new_tack,'tackURL',array('size'=>60,'maxlength'=>255)); 
+                echo $form->error($new_tack,'tackURL');
+                echo 
+                "
+                </div>
+                ";
+                echo 
+                "           
+                <div class='row'>
+                ";
+                echo $form->labelEx($new_tack,'tackDescription'); 
+                echo $form->textArea($new_tack,'tackDescription',array('rows'=>3, 'cols'=>50));
+                echo $form->error($new_tack,'tackDescription'); 
+                
+                echo "
+                </div>
+                <div class='hidden'>
+                ";
+                echo $form->hiddenField($new_tack, 'userID', array('value'=>$owner->userID)); 
+                echo $form->hiddenField($new_tack, 'boardID', array('value'=>$owner->boardID));
+                echo $form->hiddenField($new_tack, 'isPrivate', array('value'=>0)); 
+                echo 
+                "
+                </div>
+
+                <div class='row buttons>';
+                ";
+                echo CHtml::submitButton( ($new_tack->isNewRecord ? 'create' : 'Save'), array('boardID'=>$owner->boardID,'userID'=>$owner->userID)); 
+                
+                echo "</div>";
+            
+                $caller->endWidget(); 
+            echo "
+            </div>
+        </div><!-- form -->
+
+        </div>
+        ";
+        $caller->endWidget(); 
+
+    }
+
     public function __construct($type)
     {
         parent::__construct();
@@ -175,6 +270,7 @@ class Tack extends CActiveRecord
 
     public function get_widget()
     {
+        // @todo: make all of these return widgets...
         if($this->tackType == 'ext.Yiitube')
         {
             return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackURL, 'size'=>'small'));

@@ -13,90 +13,19 @@ $cs = Yii::app()->getClientScript();
 
 // register js files
 $cs->registerScriptFile($baseUrl.'/js/jquery.js');
-$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.js');
+$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
+$cs->registerScriptFile('https://w.soundcloud.com/player/api.js');
 
 // register tack css
 $cs->registerCssFile($baseUrl.'/css/user_tack.css');
 ?>
 
-<?php $this->beginWidget(
-    'bootstrap.widgets.TbModal',
-    array('id' => 'newTack')
-); ?>
-
-<div class="modal-header" align="center">
-    <a class="close" data-dismiss="modal">&times;</a>
-    <h4>New tack</h4>
-    <?php
-        $new_tack = new Tack(null);
-    ?>
-</div>
-
-<div class="modal-body" align="center">
-    <div class="form">
-        <?php $form=$this->beginWidget('CActiveForm', array(
-            'id'=>'tack-form',
-            'action'=>'/mytacks/tacklr/tack/create/',
-            'method'=>'post',
-            // Please note: When you enable ajax validation, make sure the corresponding
-            // controller action is handling ajax validation correctly.
-            // There is a call to performAjaxValidation() commented in generated controller code.
-            // See class documentation of CActiveForm for details on this.
-            'enableAjaxValidation'=>false,
-        )); ?>
-
-        <p class="note">Fields with <span class="required">*</span> are required.</p>
-
-        <?php echo $form->errorSummary($new_tack); ?>
 
 
-        <div class="row">
-            <?php echo $form->labelEx($new_tack,'tackName'); ?>
-            <?php echo $form->textField($new_tack,'tackName',array('size'=>60, 'maxLength'=>50)); ?>
-            <?php echo $form->error($new_tack,'tackName'); ?>
-        </div>
-
-        <div class="row">
-            <?php echo $form->labelEx($new_tack,'tackURL'); ?>
-            <?php echo $form->textField($new_tack,'tackURL',array('size'=>60,'maxlength'=>255)); ?>
-            <?php echo $form->error($new_tack,'tackURL'); ?>
-        </div>
-
-        <div class="row">
-            <?php echo $form->labelEx($new_tack,'tackDescription'); ?>
-            <?php echo $form->textArea($new_tack,'tackDescription',array('rows'=>3, 'cols'=>50)); ?>
-            <?php echo $form->error($new_tack,'tackDescription'); ?>
-        </div>
-        <div class="hidden">
-            <?php echo $form->hiddenField($new_tack, 'userID', array('value'=>$model->userID)); ?>
-            <?php echo $form->hiddenField($new_tack, 'boardID', array('value'=>$model->boardID)); ?>
-            <?php echo $form->hiddenField($new_tack, 'isPrivate', array('value'=>0)); ?>
-        </div>
-
-        <div class="row buttons">
-            <?php echo CHtml::submitButton( ($new_tack->isNewRecord ? 'create' : 'Save'), array('boardID'=>$model->boardID,'userID'=>$model->userID)); ?>
-        </div>
-
-        <?php $this->endWidget(); ?>
-    </div>
-</div><!-- form -->
-
-<!---
-<div class="modal-footer" align="center">
-    <?php /*$this->widget(
-        'bootstrap.widgets.TbButton',
-        array(
-            'buttonType' => 'submit',
-            'type' => 'primary',
-            'label' => 'Save Tack',
-            'url' => array('/view/', 'save', 'tack'=>$new_tack)
-        )
-    ); */?>
-
-</div>
--->
-<?php $this->endWidget(); ?>
+<?php
+Tack::getCreatorModal($this, $model);
+?>
 
 <?php
 $this->menu=array(
@@ -149,6 +78,7 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
                             <?php
                                 $tackHtml = $tack->toHtml($isOwner);
                                 echo $tackHtml['preContent'];
+                                // @todo: follow through with implementing each content type a widget
                                 if($tack->has_widget())
                                 {
                                     $this->widget($tackHtml['content']['widget_type'], $tackHtml['content']['widget_properties']);
@@ -166,8 +96,8 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
         </ul>
     </div>
 </div>
-
-<script type="text/javascript">
+<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites" width="100%" height="465" scrolling="no" frameborder="no"></iframe>
+<script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script><script type="text/javascript">
 
     $( document).ready(function() {
         $('.drag').draggable();
