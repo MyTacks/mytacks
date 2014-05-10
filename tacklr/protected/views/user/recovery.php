@@ -3,13 +3,7 @@
 /* @var $model RecoveryForm */
 /* @var $form CActiveForm */
 ?>
-<?php 
-	$this->pageTitle=Yii::app()->name . ' - Recovery';
-	$this->breadcrumbs=array(
-		'Recovery',
-	);
-?>
-
+</br>
 <div class="form">
 <fieldset>
 		<legend>Password Recovery</legend>

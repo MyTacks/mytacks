@@ -24,7 +24,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 	<?php echo $form->errorSummary($model); ?>
 
-		<?php echo $form->textFieldRow($model, 'username', array('readonly'=>false)); ?>
+		<?php echo $form->textFieldRow($model, 'username'); ?>
 		<?php echo $form->passwordFieldRow($model, 'password'); ?>
 		<?php echo $form->passwordFieldRow($model, 'password_repeat');?>
 		<?php echo $form->textFieldRow($model,'email'); ?>

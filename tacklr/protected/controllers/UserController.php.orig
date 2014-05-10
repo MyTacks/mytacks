@@ -28,11 +28,7 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index', 'view', 'create', 'activate' actions
-<<<<<<< HEAD
-				'actions'=>array('index','view','create','activate','recovery','changepassword'),
-=======
 				'actions'=>array('view','create','activate','recovery','changepassword'),
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -60,29 +56,7 @@ class UserController extends Controller
 		));
 	}
 	
-<<<<<<< HEAD
-	/**
-	 * Forget password view
-	 */
-	public function actionForget()
-	{
-		$model=new ForgetPassword;
-		
-		if(isset($_POST['ForgetPassword']))
-		{
-			echo "<br\> <br\><br\><br\><br\><br\>Email has been sent!!!";
-		}
-		
-		$this->render('forget',array(
-				'model'=>$model,
-		));
-		
-	}
-	
-	
-=======
 
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -99,47 +73,6 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-<<<<<<< HEAD
-			// check the availability of username and email 
-			if(User::model()->exists('username=:username',array('username'=>$model->username)))
-			{
-					echo 'User already exists';
-					$model->addError('username', 'Username already exists!');
-					//$this->redirect('/mytacks/tacklr/user/create');
-					return;
-			}
-			if (User::model()->findByAttributes(array('email'=>$model->email)))
-			{
-				echo 'Email already exists';
-				$model->addError('email', 'Email already exists!');
-				return;
-			}
-					
-			$model->groupID = 2;
-			$model->active = 0;
-			$model->joinDate = $timeStamp;
-			$model->activeKey = str_replace('.','p',crypt($model->username.$rnd));
-			$activationUrl = Yii::app()->getBaseUrl(true).'/user/activate?id='.$model->activeKey;
-			$uploadedFile=CUploadedFile::getInstance($model,'imageURL'); // get the file name to be uploaded
-			
-            if($uploadedFile)
-            {
-                $fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
-                $uploadedFile->saveAs(Yii::app()->basePath.'/../images/'.$fileName);
-                // store baseURL and image name .....http://localhost:8080/tckle/images/226-php24.jpg
-                $model->imageURL = Yii::app()->getBaseUrl(true).'/images/'.$fileName;
-            }
-
-			//$fullImgSource = Yii::getPathOfAlias('webroot').'/media/images/'.$fullImgName;    
-			$model->password =crypt($model->password,$model->activeKey);
-			if($model->save())
-			{
-				$title = "Tacklr Account Activation";
-				$subject = "Welcome to Tacklr";
-				$action = "activate your account";
-				$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);
-				$this->redirect(Yii::app()->homeUrl);
-=======
 			if ($model->validateUser($model->username, $model->email))
 			{
 				$model->groupID = 2;
@@ -157,8 +90,6 @@ class UserController extends Controller
 					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email); //send activation email to user
 					$this->redirect(Yii::app()->homeUrl);
 				}
-					
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 			}
 		}
 
@@ -184,13 +115,7 @@ class UserController extends Controller
 		{
 			$model->active = 1;
 			if ($model->update())
-<<<<<<< HEAD
-			{
 				$this->redirect(Yii::app()->createUrl('site/login'));
-			}
-=======
-				$this->redirect(Yii::app()->createUrl('site/login'));
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 		}
 	}
 	
@@ -223,25 +148,11 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-<<<<<<< HEAD
-        $pst = new DateTimeZone('America/Los_Angeles');
-        $date = new DateTime();
-        $date->setTimezone($pst);
-        $timeStamp = $date->format('Y-m-d H:i:s');
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['User']))
-		{
-			$model->attributes=$_POST['User'];
-            $model->updateDate = $timeStamp;
-=======
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
 			$model->password =crypt($model->password,$model->activeKey);
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
+            $model->updateDate = $timeStamp;
 			if($model->save())
 					$this->redirect($this->createUrl('//user/admin'));
 		}
@@ -252,44 +163,26 @@ class UserController extends Controller
 	}
 	
 	/** 
-<<<<<<< HEAD
-	 * Display the recovery password form to create a change password activation link
-	 * 
-=======
 	 * Display the recovery password form
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 	 */
 	public function actionRecovery()
 	{
 		$rnd = rand(0,9999);  // generate random number between 0-9999
-<<<<<<< HEAD
-		$model = new RecoveryForm;
-=======
 		$model = new RecoveryForm; 
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 		
 		if (isset($_POST['RecoveryForm']))
 		{
 			$model->attributes = $_POST['RecoveryForm'];
 			if ($model->validate())
 			{
-<<<<<<< HEAD
-				$activationkey = str_replace('.','p',crypt($model->email.$rnd));
-				$activationUrl = Yii::app()->getBaseUrl(true).'/user/changepassword?id='.$activationkey;
-=======
 				$activationkey = str_replace('.','p',crypt($model->email.$rnd));//replace '.' with 'p' in the activation key link
 				$activationUrl = Yii::app()->getBaseUrl(true).'/user/changepassword?id='.$activationkey;// generate new activation link
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 				if ($model->checkExists($activationkey))
 				{
 					$title = "Tacklr Password Recovery";
 					$subject = "Tacklr Password Recover";
 					$action = "recover your password";
-<<<<<<< HEAD
-					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);
-=======
 					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);//generate password recovery email
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 					$this->redirect(Yii::app()->homeUrl);
 				}
 			}
@@ -297,15 +190,10 @@ class UserController extends Controller
 		$this->render('recovery', array('model'=>$model));
 		
 	}
-<<<<<<< HEAD
-	/**
-	 * 
-=======
 	
 	/**
 	 * Display change password form
 	 * @param string $id is an activation key which is used to verify the user's account 
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 	 */
 	public function actionChangePassword($id)
 	{
@@ -325,22 +213,13 @@ class UserController extends Controller
 				{
 					$user->password = crypt($model->password,$model->activationKey);
 					if ($user->update())
-<<<<<<< HEAD
-					{
 						 $this->redirect(Yii::app()->createUrl('site/login'));
-					}
-=======
-						 $this->redirect(Yii::app()->createUrl('site/login'));
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 				}
 			}
 		}
 		$this->render('changepassword',array('model'=>$model));
 	}
-<<<<<<< HEAD
-=======
 	
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -427,11 +306,7 @@ class UserController extends Controller
 				<title>$title</title>
 			</head>
 			<body>
-<<<<<<< HEAD
-				<div style='width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 14px;'>
-=======
 				<div style='width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 16px;'>
->>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
 						<h1>$title</h1>
 						<div align='center'>
 						</div>

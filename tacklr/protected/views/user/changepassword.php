@@ -3,7 +3,7 @@
 /* @var $model ChangePasswordForm */
 /* @var $form CActiveForm */
 ?>
-</br> <!-- Is this necessary? found during merge...-->
+
 <div class="form">
 <fieldset>
 		<legend>Password Recovery</legend>
