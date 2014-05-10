@@ -1,0 +1,67 @@
+<?php
+/* @var $this UserController */
+/* @var $data User */
+?>
+
+<div class="view">
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('userID')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->userID), array('view', 'id'=>$data->userID)); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('groupID')); ?>:</b>
+	<?php echo CHtml::encode($data->groupID); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('username')); ?>:</b>
+	<?php echo CHtml::encode($data->username); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('password')); ?>:</b>
+	<?php echo CHtml::encode($data->password); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('firstName')); ?>:</b>
+	<?php echo CHtml::encode($data->firstName); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('lastName')); ?>:</b>
+	<?php echo CHtml::encode($data->lastName); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('imageURL')); ?>:</b>
+	<?php echo CHtml::encode($data->imageURL); ?>
+	<br />
+
+	<?php /*
+	<b><?php echo CHtml::encode($data->getAttributeLabel('gender')); ?>:</b>
+	<?php echo CHtml::encode($data->gender); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('DOB')); ?>:</b>
+	<?php echo CHtml::encode($data->DOB); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
+	<?php echo CHtml::encode($data->email); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('telephone')); ?>:</b>
+	<?php echo CHtml::encode($data->telephone); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('active')); ?>:</b>
+	<?php echo CHtml::encode($data->active); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('updateDate')); ?>:</b>
+	<?php echo CHtml::encode($data->updateDate); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('joinDate')); ?>:</b>
+	<?php echo CHtml::encode($data->joinDate); ?>
+	<br />
+
+	*/ ?>
+
+</div>
