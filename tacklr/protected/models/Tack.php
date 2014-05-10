@@ -24,6 +24,8 @@ class Tack extends CActiveRecord
     public static function getCreatorModal($caller, $owner)
     {     
 
+        $new_tack = new Tack(null);
+
         $caller->beginWidget(
             'bootstrap.widgets.TbModal',
             array('id' => 'newTack')
@@ -33,9 +35,7 @@ class Tack extends CActiveRecord
         <div class='modal-header' align='center'>
             <a class='close' ata-dismiss='modal'>&times;</a>
             <h4>New tack</h4>
-            ";
-        $new_tack = new Tack(null);
-            
+            ";            
         echo "
         </div>
 
@@ -99,7 +99,7 @@ class Tack extends CActiveRecord
                 "
                 </div>
 
-                <div class='row buttons>';
+                <div class='row buttons'>
                 ";
                 echo CHtml::submitButton( ($new_tack->isNewRecord ? 'create' : 'Save'), array('boardID'=>$owner->boardID,'userID'=>$owner->userID)); 
                 
@@ -116,6 +116,100 @@ class Tack extends CActiveRecord
 
     }
 
+    public static function searchModal($caller, $owner)
+    {     
+
+        $new_tack = new Tack(null);
+
+        $caller->beginWidget(
+            'bootstrap.widgets.TbModal',
+            array('id' => 'newTack')
+        );     
+
+        echo "
+        <div class='modal-header' align='center'>
+            <a class='close' ata-dismiss='modal'>&times;</a>
+            <h4>New tack</h4>
+            ";            
+        echo "
+        </div>
+
+        <div class='modal-body' align='center'>
+            <div class='form'> ";
+            $form=$caller->beginWidget('CActiveForm', array(
+                    'id'=>'tack-form',
+                    'action'=>'/mytacks/tacklr/tack/create/',
+                    'method'=>'post',
+                    // Please note: When you enable ajax validation, make sure the corresponding
+                    // controller action is handling ajax validation correctly.
+                    // There is a call to performAjaxValidation() commented in generated controller code.
+                    // See class documentation of CActiveForm for details on this.
+                    'enableAjaxValidation'=>false,
+                )); 
+                echo
+                "
+                <p class='note'>Fields with <span class='required'>*</span> are required.</p>
+                ";
+
+                echo $form->errorSummary($new_tack);
+
+                echo 
+                "
+                <div class='row'>
+                ";
+                echo $form->labelEx($new_tack,'tackName');
+                echo $form->textField($new_tack,'tackName',array('size'=>60, 'maxLength'=>50));
+                echo $form->error($new_tack,'tackName');
+                echo 
+                "
+                </div>
+                ";
+                echo 
+                "
+                <div class='row'>
+                ";
+                echo $form->labelEx($new_tack,'tackURL');
+                echo $form->textField($new_tack,'tackURL',array('size'=>60,'maxlength'=>255)); 
+                echo $form->error($new_tack,'tackURL');
+                echo 
+                "
+                </div>
+                ";
+                echo 
+                "           
+                <div class='row'>
+                ";
+                echo $form->labelEx($new_tack,'tackDescription'); 
+                echo $form->textArea($new_tack,'tackDescription',array('rows'=>3, 'cols'=>50));
+                echo $form->error($new_tack,'tackDescription'); 
+                
+                echo "
+                </div>
+                <div class='hidden'>
+                ";
+                echo $form->hiddenField($new_tack, 'userID', array('value'=>$owner->userID)); 
+                echo $form->hiddenField($new_tack, 'boardID', array('value'=>$owner->boardID));
+                echo $form->hiddenField($new_tack, 'isPrivate', array('value'=>0)); 
+                echo 
+                "
+                </div>
+
+                <div class='row buttons'>
+                ";
+                echo CHtml::submitButton( ($new_tack->isNewRecord ? 'create' : 'Save'), array('boardID'=>$owner->boardID,'userID'=>$owner->userID)); 
+                
+                echo "</div>";
+            
+                $caller->endWidget(); 
+            echo "
+            </div>
+        </div><!-- form -->
+
+        </div>
+        ";
+        $caller->endWidget(); 
+
+    }
     public function __construct($type)
     {
         parent::__construct();
@@ -160,7 +254,8 @@ class Tack extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'user' => array(self::BELONGS_TO, 'User', 'userID'),
-			'board' => array(self::BELONGS_TO, 'Board', 'boardID'),
+            'board' => array(self::BELONGS_TO, 'Board', 'boardID'),
+            //'feedback' => array(self::HAS_MANY, 'Feedback', 'boardID'),
 		);
 	}
 
@@ -219,6 +314,23 @@ class Tack extends CActiveRecord
 		));
 	}
 
+    /**
+     * SQL:
+     * Select * from tbl_tack where tbl_tack.type=$TYPE and (tbl_tack.content like %$KEY1% or tbl_tack.content like %KEY2%...) orderby count()
+     */
+    public function search_for_board()
+    {
+        $criteria = new CDbCriteria;
+        $criteria->with = array('tbl_board',
+                                'tbl_tack');
+        $criteria->select = array('tbl_board.id');
+        $criteria->condition = "foreign_table1.col1=:col_val AND 
+                                foreign_table3.col3=:col_val2";
+        $criteria->params = array(':col_val' => some_val, ':col_val2' => other_val);
+        $criteria->order = 'foreign_table3.col5 DESC';
+        $criteria->limit = 10;
+    }
+
     public function get_type()
     {
         return $this->tackType;
@@ -235,13 +347,7 @@ class Tack extends CActiveRecord
         $html .= "<a href=tackURL><h5>Link</h5></a></div>";
         return $html;
         */
-        $pre = "<div class='user_tack' onclick='setOnTop()' id='".$this->tackID."' style=' position:relative;";
-
-            if($this->has_widget())
-            {
-                //$pre .= 'width:560px';
-            }
-        $pre  .= "'>\n";
+        $pre = "<li class='user_tack' id='".$this->tackID."'>\n";// style=' position:relative;'>\n";
         if($isOwner)
         {
             $pre .=  CHtml::link('X',array('tack/delete', 'id'=>$this->tackID));
@@ -251,16 +357,38 @@ class Tack extends CActiveRecord
         /// @todo add tack type! maybe make it widget type...
         $pre .= "\t\t<div class='tack_content'>\n";
         //$html = "";
-        $post = "</div>\n<div class='tack_feedback'>\n";
-        $post .= $this->getFeedbackAsHtml()."</div>";
-        $post .= "</div>";
+        $post = "</div>\n";
+        $post .= "<div class='tack_description'>".$this->tackDescription."</div>";
+        $post .= "<div class='tack_feedback'>\n";
+        $post .= $this->getFeedbackAsHtml();
+        $post .= $this->getFeedbackField();
+        $post .= "</div>"; // end teac_feedback
+        $post .= "</div>"; // end user_tack
+
         return array('preContent'=>$pre, 'content'=>$this->get_widget(), 'postContent'=>$post);
 
     }
 
     public function getFeedbackAsHtml()
     {
-        return "";
+        $feedbacks = Feedback::model()->with(array( 'tacks'=>array('condition'=>'tack_id='.$this->tackID)))->findAll();
+        $result = "<div class='feedback'>\n";
+        foreach ($feedbacks as $feedback)
+        {
+            $owner = User::model()->findByPk($feedback->owner_id);
+            $timestamp=date_format(date_create($feedback->timestamp),'d/m/Y \a\t H:i');
+
+            
+            $result .= $feedback->content;
+            $result .= "<p><div class='feedback_meta'>".$owner->username." on ".$timestamp."</div></style></p><br/>";
+        }
+        return $result;
+    }
+    public function getFeedbackField()
+    {
+        $result = CHtml::textArea("feedback_entry".$this->tackID,"(what do you think of this?)",array('submit'=>'Nothing', 'class'=>'feedback_entry','onfocus'=>'if(this.value==this.defaultValue)this.value="";', 'onblur'=>'if(this.value=="")this.value=this.defaultValue;'));
+        $result .= CHtml::button('give', array('class'=>'feedback_button','submit' => array('action'=>'/tack/addFeedback','method'=>'post','id'=>$this->tackID)));
+        return $result;
     }
 
     public function has_widget()
@@ -274,6 +402,11 @@ class Tack extends CActiveRecord
         if($this->tackType == 'ext.Yiitube')
         {
             return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackURL, 'size'=>'small'));
+        }
+        else if($this->tackType == 'sc-widget')
+        {
+            return '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url='.$this->tackURL.'" width="100%" scrolling="no" frameborder="no"></iframe>';
+
         }
         else if ($this->tackType == 'image')
         {
@@ -289,40 +422,6 @@ class Tack extends CActiveRecord
             $html .= '<p><div class="tack_content" align="center">'.$this->tackDescription.'</div></p>';
             return $html;
         }
-    }
-
-    public static function youtubeToHref($vid)
-    {
-        return "https://youtube.com/embed/".$vid;
-    }
-
-    public static function get_css()
-    {
-        $css = "<style type='text/css'>\n";
-        $css .= ".user_tack {\n";
-        $css .= "position: absolute;\n";
-        $css .= "float: right|bottom;\n";
-        $css .= "color: grey;\n";
-        $css .= "border: 4px solid darkblue;\n";
-        $css .= "padding: 6px;\n";
-        $css .= "overflow: hidden;\n";
-        $css .= "}\n";
-        $css .= ".tack_title {\n";
-        $css .= "text-align: center;\n";
-        $css .= "}\n";
-        $css .= ".tack_content {\n";
-        $css .= "text-align: center;\n";
-        $css .= "width: 100%;\n";
-        $css .= "height: 100%;\n";
-        $css .= "float: bottom|right;\n";
-        $css .= "}\n";
-        $css .= ".tack_feedback {\n";
-        $css .= "text-align: center;\n";
-        $css .= "float: bottom;\n";
-        $css .= "}\n";
-        $css .= "</style>\n";
-
-        return $css;
     }
 
 	/**

@@ -50,11 +50,18 @@ class TackController extends Controller
         }
 	}
 
+    /**
+     * @return String representing type of tack...
+     */
     public function deduceTackType($content)
     {
         if(strpos($content, "youtube") !== false)
         {
             return 'ext.Yiitube';
+        }
+        if(strpos($content, "soundcloud"))
+        {
+            return 'sc-widget';
         }
         else if(strpos($content, ".jpg") !== false
             || strpos($content, ".img") !== false

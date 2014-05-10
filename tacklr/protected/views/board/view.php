@@ -13,15 +13,17 @@ $cs = Yii::app()->getClientScript();
 
 // register js files
 $cs->registerScriptFile($baseUrl.'/js/jquery.js');
-$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4');
+//$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4/ui/');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 $cs->registerScriptFile('https://w.soundcloud.com/player/api.js');
+//$cs->registerScriptFile($baseUrl.'/js/ajaxScript.js');
 
 // register tack css
 $cs->registerCssFile($baseUrl.'/css/user_tack.css');
 ?>
 
-
+<!-- Allow SoundCloud player -->
+<script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
 <?php
 Tack::getCreatorModal($this, $model);
@@ -59,24 +61,22 @@ $this->menu=array(
 
 <?php
 
-$BID = $model->boardID;
-$tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
-$isOwner = false;
-if(User::model()->findByAttributes(array('userID'=>$model->userID))->username == Yii::app()->user->id)
-{
-    $isOwner = true;
-}
+    $BID = $model->boardID;
+    $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
+    $isOwner = false;
+    if(User::model()->findByAttributes(array('userID'=>$model->userID))->username == Yii::app()->user->id)
+    {
+        $isOwner = true;
+    }
 ?>
 
 <div class="row">
     <div class="span12">
         <ul class="thumbnails">
             <?php foreach ($tacks as $tack): ?>
-                <li class="span4">
-                    <div class="drag">
-                        <div class="thumbnail">
+                <!--<li class="span4">    -->
                             <?php
-                                $tackHtml = $tack->toHtml($isOwner);
+                                $tackHtml = $tack->toHtml($isOwner,$this,Yii::app()->user);
                                 echo $tackHtml['preContent'];
                                 // @todo: follow through with implementing each content type a widget
                                 if($tack->has_widget())
@@ -88,25 +88,38 @@ if(User::model()->findByAttributes(array('userID'=>$model->userID))->username ==
                                     echo $tackHtml['content'];
                                 }
                                 echo $tackHtml['postContent'];
+                                $tack->getFeedbackField($this, Yii::app()->user);
                             ?>
-                        </div>
-                    </div>
-                </li>
+                <!--</li>-->
             <?php endforeach ?>
         </ul>
     </div>
 </div>
-<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites" width="100%" height="465" scrolling="no" frameborder="no"></iframe>
-<script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script><script type="text/javascript">
+
+
+<script type="text/javascript">
 
     $( document).ready(function() {
-        $('.drag').draggable();
-        $('.drag').resizable();
+        $(".user_tack").draggable();
+        $(".user_tack").resizable();    
     });
 
     maxZ = 1;
-    $(".user_tack").click(function setOnTop() {
+    $(".user_tack").mousedown(function setOnTop() {
         $(this).css("z-index", maxZ + 1);
         maxZ += 1;
     });
+
+    $(".user_tack").dblclick(function() {
+        $('tack_modal').modal('show');
+    });
+
+    $(".user_tack").mouseup(function() {
+        //alert($(this).position().top + " " + $(this).position().left);
+    });
+
+
+    
+
+    
 </script>

@@ -47,7 +47,7 @@ return array(
                 'packages'=>array(
                     'jquery'=>array(
                        //'baseUrl'=>dirname(__FILE__)."../../../",
-                       // 'js'=>array('js/tack_generator.js',)
+                        'js'=>array('../..//js/jquery.js',)
                     ),
                 ),
             ),
@@ -86,16 +86,18 @@ return array(
 					'/' => '/view',
 					'//' => '/',
 					'/' => '/',
+					'/site/index' =>'/',
+					'/' => '/site/index' 
 			
 			),
 				
-			/*
+			
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
-			*/
+			
 		),
 	
 		// uncomment the following to use a MySQL database
