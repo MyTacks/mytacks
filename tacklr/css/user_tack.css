@@ -1,43 +1,98 @@
+body {
+	font-family: 'Lucida Grande', 'Helvetica Neue', sans-serif;
+	font-size: 13px;
+}
 
 .user_tack {
     color: grey;
-    border: 4px solid darkblue;
-    padding: 6px;
+    border: 2px solid darkblue;
     position: relative;
     display: table-cell;
+    /*background: -webkit-linear-gradient(rgb(240, 240, 10),rgb(255, 255, 136));*/
+    background-color: rgb(255, 255, 136);
+    -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
+    margin-top: 15px;
+    padding: auto;
+    min-width: 300px;
+    max-height: 800px;
 }
 .tack_title {
+    text-align: center;
+    border-bottom: 2px solid rgb(240, 240, 10);
+    background-color: rgb(255, 255, 136);
+    width:90%;
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-left:4px;
+    padding-top:4px;
+    /*border: 1px solid black;*/
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:10px;
+}
+
+.tack_title span { float: left;}
+
+
+.tack_shadow {
+    background: -webkit-linear-gradient(rgb(240, 240, 10), rgb(250, 250, 30));
+    height:8px;
+}
+
+
+.tack_content_and_comment_container {
+    background: -webkit-linear-gradient(rgb(250, 250, 30),rgb(255, 255, 136));
     text-align: center;
 }
 
 .tack_content {
     text-align: center;
-    width: 100%;
-    overflow: auto;
+    align:center;
+    width: auto;
+    overflow: hidden;
+    padding:8px;
+    margin-top:0px;
+    margin-right: auto;
+    margin-left: auto;
+    /*border: 1px solid black;*/
+    margin-bottom: 10px;
+    padding-top:10px;
 }
 
 .tack_description {
+	border-top: 2px solid darkgray;
+	border-bottom: 2px solid darkgray;
     text-align: center;
-    width: 100%;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 10px;
 }
 
-.tack_feedback {
-	max-height: 150px;
-	height: auto;
+.feedback_area {
+	max-height: 250px;
 	width: 100%;
-	padding: 5px;
+	padding-top: 14px;
     text-align: center;
 	overflow: auto;
+	margin: auto;
 }
 
 .feedback {
 	float:left;
 	text-align: left;
-	width: 80%;
+	width: 100%;
+	margin: auto;
+	margin-left: 8px;
+
 }
 
 .feedback_meta {
 	font-size: 80%;
+}
+
+.feedback_form {
+
 }
 
 .feedback_entry {
@@ -45,15 +100,59 @@
 	rows: 2;
 	border: 3px solid #cccccc;
 	font-family: Tahoma, sans-serif;
-	overflow: auto;
-	float:left;
+	overflow: hidden;
+	margin: auto;
 }
 
 .feedback_button {
 	float:right;
 }
 
+.feedback_area input, .feedback_area textarea {
+	border: 4px solid rgba(0,0,0,0.1);
+	padding: 8px 10px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	outline: 0;
+}
 
-.tacks_container {
-	align:center;
+.feedback_area textarea {
+	width: 80%;
+}
+
+.feedback_area input[type="submit"] {
+	cursor: pointer;
+	background: -webkit-linear-gradient(top, #efefef, #ddd);
+	background: -moz-linear-gradient(top, #efefef, #ddd);
+	background: -ms-linear-gradient(top, #efefef, #ddd);
+	background: -o-linear-gradient(top, #efefef, #ddd);
+	background: linear-gradient(top, #efefef, #ddd);
+	color: #333;
+	text-shadow: 0px 1px 1px rgba(255,255,255,1);
+	border: 1px solid #ccc;
+}
+
+.feedback_area input[type="submit"]:hover {
+	background: -webkit-linear-gradient(top, #eee, #ccc);
+	background: -moz-linear-gradient(top, #eee, #ccc);
+	background: -ms-linear-gradient(top, #eee, #ccc);
+	background: -o-linear-gradient(top, #eee, #ccc);
+	background: linear-gradient(top, #eee, #ccc);
+	border: 1px solid #bbb;
+}
+
+.feedback_area input[type="submit"]:active {
+	background: -webkit-linear-gradient(top, #ddd, #aaa);
+	background: -moz-linear-gradient(top, #ddd, #aaa);
+	background: -ms-linear-gradient(top, #ddd, #aaa);
+	background: -o-linear-gradient(top, #ddd, #aaa);
+	background: linear-gradient(top, #ddd, #aaa);	
+	border: 1px solid #999;
+}
+
+.feedback_area div {
+	margin-bottom: 8px;
 }

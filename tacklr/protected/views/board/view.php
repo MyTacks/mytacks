@@ -17,11 +17,12 @@ $cs->registerScriptFile($baseUrl.'/js/jquery.js');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 $cs->registerScriptFile('https://w.soundcloud.com/player/api.js');
 //$cs->registerScriptFile($baseUrl.'/js/ajaxScript.js');
+$cs->registerScriptFile($baseUrl.'/js/zoomooz/jquery.zoomooz.min.js');
 
 // register tack css
 $cs->registerCssFile($baseUrl.'/css/user_tack.css');
+$cs->registerCssFile($baseUrl.'/css/board.css');
 ?>
-
 <!-- Allow SoundCloud player -->
 <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
@@ -70,8 +71,8 @@ $this->menu=array(
     }
 ?>
 
-<div style="width:90% margin-left:10px align:center" >
-        <ul class="thumbnails" style="width:90% margin-left:10px">
+<div class = "thumbnail_frame" style="width:90% margin-left:10px align:center" >
+        <ul class="thumbnails" style="width:90% margin-left:10px opacity:0.6">
             <?php foreach ($tacks as $tack): ?>
                 <!--<li class="span4">    -->
                             <?php
@@ -116,7 +117,9 @@ $this->menu=array(
         //alert($(this).position().top + " " + $(this).position().left);
     });
 
-
+    addfeedback = function($id) {
+        $.post("test.php", $id, "a","b");
+    }
     
 
     

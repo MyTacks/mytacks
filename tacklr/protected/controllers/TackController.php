@@ -81,6 +81,27 @@ class TackController extends Controller
         }
     }
 
+    public function actionUpdate()
+    {
+            var_dump($_GET);
+            $feedback = new Feedback;
+            $userId = User::model()->findByAttributes(array('username'=>$_GET['username']))->userID;
+            $feedback->tack_id = $_GET['tackid'];
+            $feedback->owner_id = $userId;
+            $feedback->content = $_GET['comment'];
+            $pst = new DateTimeZone('America/Los_Angeles');
+            $date = new DateTime();
+            $date->setTimezone($pst);
+            $feedback->timestamp = $date->format('Y-m-d H:i:s');
+            
+            echo "\n\n\n";
+            var_dump($feedback);
+
+            $feedback->save();
+            $this->redirect($this->createUrl('/board/view/',array('id'=>$_GET['boardid'])));
+    }
+
+
     public function accessRules()
     {
         return array(

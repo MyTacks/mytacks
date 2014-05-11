@@ -347,32 +347,48 @@ class Tack extends CActiveRecord
         $html .= "<a href=tackURL><h5>Link</h5></a></div>";
         return $html;
         */
-        $pre = "<li class='user_tack' id='".$this->tackID."'>\n";// style=' position:relative;'>\n";
+        $pre = "<li class='user_tack pull-left pull-up' id='".$this->tackID."'>\n";// style=' position:relative;'>\n";
+        
+        $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n<p>";
+        
         if($isOwner)
         {
-            $pre .=  CHtml::link('X',array('tack/delete', 'id'=>$this->tackID));
+            $pre .= "<span>" . CHtml::link('X',array('tack/delete', 'id'=>$this->tackID)) . "</span>";
         }
-        $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n";
-        $pre .= $this->tackName."\n</div>\n";
+
+        $pre .= $this->tackName."\n</p></div>\n";
         /// @todo add tack type! maybe make it widget type...
+        $pre .= "<div class='tack_content_and_comment_container'>";
+        $pre .= "<div class='tack_shadow'></div>";
         $pre .= "\t\t<div class='tack_content'>\n";
         //$html = "";
         $post = "</div>\n";
-        $post .= "<div class='tack_description'>".$this->tackDescription."</div>";
-        $post .= "<div class='tack_feedback'>\n";
+        $post .= $this->getTackDescriptionAsHtml();
+        $post .= "<div class='feedback_area'>\n";
         $post .= $this->getFeedbackAsHtml();
-        $post .= $this->getFeedbackField();
         $post .= "</div>"; // end teac_feedback
+        $post .= $this->getFeedbackField();
+        $post .= "</div>"; // end tack_content_and_comment_container
         $post .= "</div>"; // end user_tack
 
         return array('preContent'=>$pre, 'content'=>$this->get_widget(), 'postContent'=>$post);
 
     }
 
+    public function getTackDescriptionAsHtml()
+    {
+        $result = "";
+        if(strlen($this->tackDescription) > 0)
+        {
+            $result = "<div class='tack_description'>".$this->tackDescription."</div>";
+        }
+        return $result;
+    }
+
     public function getFeedbackAsHtml()
     {
         $feedbacks = Feedback::model()->with(array( 'tacks'=>array('condition'=>'tack_id='.$this->tackID)))->findAll();
-        $result = "<div class='feedback'>\n";
+        $result = "<div class='feedback".$this->tackID."'>\n";
         foreach ($feedbacks as $feedback)
         {
             $owner = User::model()->findByPk($feedback->owner_id);
@@ -386,9 +402,20 @@ class Tack extends CActiveRecord
     }
     public function getFeedbackField()
     {
-        $result = CHtml::textArea("feedback_entry".$this->tackID,"(what do you think of this?)",array('submit'=>'Nothing', 'class'=>'feedback_entry','onfocus'=>'if(this.value==this.defaultValue)this.value="";', 'onblur'=>'if(this.value=="")this.value=this.defaultValue;'));
-        $result .= CHtml::button('give', array('class'=>'feedback_button','submit' => array('action'=>'/tack/addFeedback','method'=>'post','id'=>$this->tackID)));
-        return $result;
+        $result = '<div class="feedback_form"><form action="/mytacks/tacklr/tack/update">
+            <div>
+                <input type="submit" name="submit" value="Add Comment" onclick="if addfeedback(\''.$this->tackID.'\') return false;">
+            </div> 
+            <div>
+                <textarea rows="3" name="comment" class="feedback_form" placeholder="Comment"></textarea>
+            </div> 
+            <div class="hidden">
+                <input value="'.$this->tackID.'" name="tackid" id="tackid">
+                <input value="'.Yii::app()->user->id.'" name="username" id="username">
+                <input value="'.$this->boardID.'" name="boardid" id="boardid">
+            </div>
+            </form></div>';
+    return $result;
     }
 
     public function has_widget()
@@ -419,7 +446,6 @@ class Tack extends CActiveRecord
         else
         {
             $html = '<p><div class="tack_content" align="center">'.$this->tackURL.'</div></p>';
-            $html .= '<p><div class="tack_content" align="center">'.$this->tackDescription.'</div></p>';
             return $html;
         }
     }

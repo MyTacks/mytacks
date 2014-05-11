@@ -1,0 +1,11 @@
+html { 
+	background: url(../images/cork.jpg) no-repeat center center fixed;
+	background-repeat: repeat-y; 
+	background-size: cover;
+}
+
+
+div.tacks_container {
+	background: url(../images/cork.jpg) no-repeat center center fixed; 
+	background-size: cover;
+}

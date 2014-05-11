@@ -23,7 +23,7 @@ class Feedback extends CActiveRecord
 	{
 		return array(
 			'tack_id' => 'Tack',
-			'userID' => 'User',
+			'owner_id' => 'User',
 			'content' => 'content',
 			'timestamp' => 'timestamp'
 		);
@@ -40,10 +40,25 @@ class Feedback extends CActiveRecord
 		));
 	}
 
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array('tack_id, owner_id, content', 'required'),
+			array('tack_id, owner_id, content', 'safe', 'on'=>'insert'),
+            );
+	}
+
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
+
+	public function __construct()
+    {
+        parent::__construct();
+    }
 }
 
 ?>
