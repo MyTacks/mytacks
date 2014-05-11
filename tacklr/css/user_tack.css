@@ -13,8 +13,14 @@ body {
     -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
     margin-top: 15px;
     padding: auto;
-    min-width: 300px;
+    min-width: 350px;
     max-height: 800px;
+    position: -webkit-sticky;
+    position:    -moz-sticky;
+    position:     -ms-sticky;
+    position:      -o-sticky;
+    position:         sticky;
+    top: 130px;
 }
 .tack_title {
     text-align: center;
@@ -71,9 +77,9 @@ body {
 
 .feedback_area {
 	max-height: 250px;
-	width: 100%;
+	width: 95%;
 	padding-top: 14px;
-	padding-right: 30px;
+	padding-right: 35px;
 	padding-left: 30px;
     text-align: left;
 	overflow: auto;
@@ -85,8 +91,6 @@ body {
 	text-align: left;
 	width: 100%;
 	margin: auto;
-	margin-left: 8px;
-
 }
 
 .feedback_meta {
@@ -122,7 +126,7 @@ body {
 }
 
 .feedback_area textarea {
-	width: 85%;
+	width: 80%;
 }
 
 .feedback_area input[type="submit"] {

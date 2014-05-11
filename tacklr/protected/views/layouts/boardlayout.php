@@ -25,27 +25,7 @@
 		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
 	</div><!-- header -->
 
-	    
-	<?php
-	$this->widget('bootstrap.widgets.TbNavbar', array(
-	    'type'=> null ,
-	    'brand'=>'Tacklr',
-	    'brandUrl'=> array('/site/index'),
-	    'collapse'=>true, // requires bootstrap-responsive.css
-	    'items'=> array(
-	        array(
-	            'class'=>'bootstrap.widgets.TbMenu',
-	            'htmlOptions'=>array('class'=>'pull-right'),
-	            'items'=>array(
-	                array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-                    array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
-					array('label'=>'Edit Profile', 'url'=>array('/user/UpdateProfile', 'id'=>Yii::app()->user->getId()),'visible'=>!Yii::app()->user->isGuest)
-	            ),
-	        ),
-            array('class'=>'bootstrap.widgets.TbButton', 'type'=>'primary', 'label'=>'Boards', 'url'=>array('/board'), 'visible'=>!Yii::app()->user->isGuest)
-	    ),
-	)); 
-	?>
+	
 
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(

@@ -61,6 +61,10 @@ class TackController extends Controller
         {
             return 'ext.Yiitube';
         }
+        if(strpos($content, "slideshare"))
+        {
+            return 'slideshare';
+        }
         if(strpos($content, "soundcloud"))
         {
             return 'sc-widget';
@@ -98,6 +102,10 @@ class TackController extends Controller
             var_dump($feedback);
 
             $feedback->save();
+            if(isset($_GET['index']))
+            {
+                $this->redirect($this->createUrl('/'));
+            }
             $this->redirect($this->createUrl('/board/view/',array('id'=>$_GET['boardid'])));
     }
 

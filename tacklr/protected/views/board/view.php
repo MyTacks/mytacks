@@ -27,7 +27,18 @@ $cs->registerCssFile($baseUrl.'/css/board.css');
 <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
 <?php
-Tack::getCreatorModal($this, $model);
+
+    $isOwner = false;
+
+    $thisUser = User::model()->findByAttributes(array('userID'=>$model->userID)); 
+    if($thisUser->username == Yii::app()->user->id)
+    {
+        $isOwner = true;
+    }
+    if($isOwner)
+    {
+        Tack::getCreatorModal($this, $model);
+    }
 ?>
 
 <?php
@@ -40,13 +51,16 @@ $this->menu=array(
     //array('label'=>'New Tack', 'url'=>array('#', 'htmlOptions'=>array('data-target' => 'newTack')))
 );
 ?>
-<div id="create_tack" align="right">
-
-</div>
-
-<h1 align="center">
+<div class="board_title" align="center">
+    <div class="tack_title">
     <?php echo $model->boardTitle; ?>
-    <?php $this->widget(
+    </div>
+    <div class="tack_content">
+    <?php echo $model->description; 
+        if($isOwner)
+        {
+            echo "<br/>";
+            $this->widget(
         'bootstrap.widgets.TbButton',
         array(
             'label' => 'Add Tack',
@@ -54,11 +68,14 @@ $this->menu=array(
             'htmlOptions' => array(
                 'data-toggle' => 'modal',
                 'data-target' => '#newTack',
+                ''
             ),
         )
-    );
+        );
+        }
     ?>
-</h1>
+    </div>
+</div>
 
 <?php
 $board_in_db = Board::model()->findByAttributes(array('boardID'=>$model->boardID));
@@ -66,19 +83,14 @@ $BID = ($board_in_db['boardID']);
 
     $BID = $model->boardID;
     $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
-    $isOwner = false;
-    if(User::model()->findByAttributes(array('userID'=>$model->userID))->username == Yii::app()->user->id)
-    {
-        $isOwner = true;
-    }
 ?>
 
-<div class = "thumbnail_frame" style="width:90% margin-left:10px align:center" >
+<div class = "thumbnail_frame" style="width:90% margin-top:10px align:center" >
         <ul class="thumbnails" style="width:90% margin-left:10px opacity:0.6">
             <?php foreach ($tacks as $tack): ?>
                 <!--<li class="span4">    -->
                             <?php
-                                $tackHtml = $tack->toHtml($isOwner,$this,Yii::app()->user);
+                                $tackHtml = $tack->toHtml($isOwner);
                                 echo $tackHtml['preContent'];
                                 // @todo: follow through with implementing each content type a widget
                                 if($tack->has_widget())
@@ -102,7 +114,8 @@ $BID = ($board_in_db['boardID']);
 
     $( document).ready(function() {
         $(".user_tack").draggable();
-        $(".user_tack").resizable();    
+        $(".board_title").draggable();
+        $(".user_tack").resizable(); 
     });
 
     maxZ = 1;
@@ -122,7 +135,4 @@ $BID = ($board_in_db['boardID']);
     addfeedback = function($id) {
         $.post("test.php", $id, "a","b");
     }
-    
-
-    
 </script>

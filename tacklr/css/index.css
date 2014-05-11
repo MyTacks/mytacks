@@ -1,4 +1,26 @@
 html { 
+	background: url(../images/cork.jpg) no-repeat center center fixed;
+	background-repeat: repeat-y; 
+	background-size: cover;
+	text-align: center;
+}
+
+
+.tacks_container {
 	background: url(../images/cork.jpg) no-repeat center center fixed; 
 	background-size: cover;
+	margin-top: 70px;
+}
+
+.board_title {
+	color: grey;
+    border: 2px solid darkblue;
+    position: relative;
+    display: table-cell;
+    background-color: rgb(255, 255, 136);
+    -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
+    margin-top: 15px;
+    padding: auto;
+    min-width: 250px;
+    max-height: 200px
 }

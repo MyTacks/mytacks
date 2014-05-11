@@ -2,7 +2,7 @@
 
 class SiteController extends Controller
 {
-	public $layout='//layouts/indexlayout';
+	public $layout='//layouts/indexmain';
 
 	/**
 	 * Declares class-based actions.
@@ -88,7 +88,7 @@ class SiteController extends Controller
 			if($model->validate() && $model->login())
 			{
 				$user = User::model()->findByAttributes(array('username'=>$model->username));
-				if ($user->groupID == 1)
+				if ($user->groupID == 2)
 					$this->redirect($this->createUrl('//site'));
 				else
 					$this->redirect($this->createUrl('//user/admin'));

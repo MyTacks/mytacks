@@ -1,5 +1,5 @@
 <?php /* @var $this Controller */ ?>
-<?php $this->beginContent('//layouts/boardlayout'); ?>
+<?php $this->beginContent('//layouts/indexlayout'); ?>
 <div class="span-12">
 	<div class="sidebar">
 	<?php

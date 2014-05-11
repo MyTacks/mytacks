@@ -335,18 +335,8 @@ class Tack extends CActiveRecord
     {
         return $this->tackType;
     }
-    public function toHtml($isOwner=false)
+    public function toHtml($isOwner=false,$index=false)
     {
-        /*
-        $html = "";
-        if($this->imageURL !== null)
-            $html = "<img src=>".$this->imageURL."</img>";
-
-        $html .= "<div class='caption'>";
-        $html .= "<a tack link>";
-        $html .= "<a href=tackURL><h5>Link</h5></a></div>";
-        return $html;
-        */
         $pre = "<li class='user_tack pull-left pull-up' id='".$this->tackID."'>\n";// style=' position:relative;'>\n";
         
         $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n<p>";
@@ -354,6 +344,10 @@ class Tack extends CActiveRecord
         if($isOwner)
         {
             $pre .= "<span>" . CHtml::link('X',array('tack/delete', 'id'=>$this->tackID)) . "</span>";
+        }
+        if($index)
+        {
+            $pre .="<span>" . CHtml::link('Go to board',array('board/view', 'id'=>((string)$this->boardID))) . "</span>";
         }
 
         $pre .= $this->tackName."\n</p></div>\n";
@@ -367,7 +361,7 @@ class Tack extends CActiveRecord
         $post .= "<div class='feedback_area'>\n";
         $post .= $this->getFeedbackAsHtml();
         $post .= "</div>"; // end teac_feedback
-        $post .= $this->getFeedbackField();
+        $post .= $this->getFeedbackField($index);
         $post .= "</div>"; // end tack_content_and_comment_container
         $post .= "</div>"; // end user_tack
 
@@ -400,19 +394,18 @@ class Tack extends CActiveRecord
         }
         return $result;
     }
-    public function getFeedbackField()
+    public function getFeedbackField($index=false)
     {
-        $result = '<div class="feedback_form"><form action="/mytacks/tacklr/tack/update">
+
+        $result = '<div class="form"><form action="/mytacks/tacklr/tack/update">
             <div>
-                <input type="submit" name="submit" value="Add Comment" onclick="if addfeedback(\''.$this->tackID.'\') return false;">
-            </div> 
-            <div>
-                <textarea rows="3" name="comment" class="feedback_form" placeholder="Comment"></textarea>
+                <textarea rows="3" name="comment" class="feedback_form" placeholder="Comment then press \'enter\'" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
             </div> 
             <div class="hidden">
                 <input value="'.$this->tackID.'" name="tackid" id="tackid">
                 <input value="'.Yii::app()->user->id.'" name="username" id="username">
                 <input value="'.$this->boardID.'" name="boardid" id="boardid">
+                '.($index ? '<input value="index" name="index" id="gotoindex">' : '').'
             </div>
             </form></div>';
     return $result;
@@ -430,9 +423,13 @@ class Tack extends CActiveRecord
         {
             return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackURL, 'size'=>'small'));
         }
+        else if($this->tackType == 'slideshare')
+        {
+            return "<iframe src='".$this->tackURL."' scrolling='no' allowfullscreen> </iframe> <div style='margin-bottom:5px'> ";
+        }
         else if($this->tackType == 'sc-widget')
         {
-            return '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url='.$this->tackURL.'" width="100%" scrolling="no" frameborder="no"></iframe>';
+            return $this->tackURL;
 
         }
         else if ($this->tackType == 'image')
@@ -449,7 +446,6 @@ class Tack extends CActiveRecord
             return $html;
         }
     }
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
