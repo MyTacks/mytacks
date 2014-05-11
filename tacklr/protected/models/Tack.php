@@ -21,28 +21,6 @@
  */
 class Tack extends CActiveRecord
 {
-    public function __construct($type, $board=null, $user=null)
-    {
-        $this->tackType = $type;
-
-        if($board != null)
-        {
-            $this->boardID = $board;
-        }
-        else if(isset($_POST['boardID']))
-        {
-            $this->boardID = $board;
-        }
-
-        if($user != null)
-        {
-            $this->userID = $user;
-        }
-        else if(isset($_POST['userID']))
-        {
-            $this->userID = $user;
-        }
-    }
     public static function getCreatorModal($caller, $owner)
     {     
 
