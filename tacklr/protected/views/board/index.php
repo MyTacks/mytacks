@@ -18,33 +18,46 @@ $cs->registerScriptFile($baseUrl.'/js/jquery-1.10.2.js');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.js');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
-$baseUrl = Yii::app()->baseUrl;
-$cs = Yii::app()->getClientScript();
 
-$cs->registerCssFile($baseUrl.'/css/user_tack.css');
 $cs->registerCssFile($baseUrl.'/css/board.css');
 
 
 //Yii::import('extensions/Yiitube');
 ?>
+<?php Board::getCreatorModal($this, null); ?>
+
 <div class="board_title" align="center">
     <div class="tack_title">
     Boards
     </div>
     <div class="tack_content">
     Boards that belong to <?php echo Yii::app()->user->getId(); ?>
+    <?php 
+            echo "<br/><br/>";
+            $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'label' => 'New Board',
+            'type' => 'primary',
+            'htmlOptions' => array(
+                'data-toggle' => 'modal',
+                'data-target' => '#newBoard',
+                ''
+            ),
+        )
+        );
+    ?>
     </div>
 </div>
-
 <?php
-// Get the boards from the user in the DB...
-$user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
-$UID = ($user_in_db['userID']);
-$boards = Board::model()->findAllByAttributes(array('userID'=>(int)$UID));
+    // Get the boards from the user in the DB...
+    $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
+    $UID = ($user_in_db['userID']);
+    $boards = Board::model()->findAllByAttributes(array('userID'=>(int)$UID));
 ?>
 
 
-<div class = "thumbnail_frame" style="width:90% margin-left:10px align:center" >
+<div class = "thumbnail_frame" style="width:90% margin-top:10px align:center" >
         <ul class="thumbnails">
             <?php foreach ($boards as $board): ?>
                 <li class="span4">
@@ -52,8 +65,9 @@ $boards = Board::model()->findAllByAttributes(array('userID'=>(int)$UID));
                         <div class="">
 
                             <div class="user_tack">
-                                <a href="/mytacks/tacklr/board/view/id/<?php echo $board['boardID']; ?>">
-                                    <div class="tack_title"><?php echo $board['boardTitle'] ?></div>
+                                    <div class="tack_title"><span> <a href="/mytacks/tacklr/board/delete/id/<?php echo $board['boardID']; ?>")) ?>X</a> </span>
+                                    <a href="/mytacks/tacklr/board/view/id/<?php echo $board['boardID']; ?>">
+                                    <?php echo $board['boardTitle'] ?></div>
                                     <div class="tack_content"><?php echo $board['description'] ?></div>
                                     </a>
 

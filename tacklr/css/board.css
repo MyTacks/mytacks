@@ -26,3 +26,55 @@ div.tacks_container {
     min-width: 250px;
     max-height: 200px
 }
+
+.user_tack {
+    color: grey;
+    border: 2px solid darkblue;
+    position: relative;
+    display: table-cell;
+    /*background: -webkit-linear-gradient(rgb(240, 240, 10),rgb(255, 255, 136));*/
+    background-color: rgb(255, 255, 136);
+    -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
+    margin-top: 15px;
+    padding: auto;
+    min-width: 350px;
+    max-height: 800px;
+    position: -webkit-sticky;
+    position:    -moz-sticky;
+    position:     -ms-sticky;
+    position:      -o-sticky;
+    position:         sticky;
+    top: 180px;
+}
+
+.tack_title {
+    text-align: center;
+    border-bottom: 2px solid rgb(240, 240, 10);
+    background-color: rgb(255, 255, 136);
+    width:90%;
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-left:4px;
+    padding-top:4px;
+    /*border: 1px solid black;*/
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:10px;
+}
+
+.tack_title span { float: left;}
+
+
+.tack_content {
+    text-align: center;
+    width: auto;
+    overflow: hidden;
+    padding:8px;
+    margin-top:0px;
+    margin-right: auto;
+    margin-left: auto;
+    /*border: 1px solid black;*/
+    margin-bottom: 10px;
+    padding-top:10px;
+}

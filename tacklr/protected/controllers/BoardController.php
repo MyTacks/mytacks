@@ -15,7 +15,7 @@ class BoardController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-            'postOnly + delete', // we only allow deletion via POST request
+            //'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -33,7 +33,7 @@ class BoardController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create', 'update' and 'delete' actions
 				'actions'=>array('create','update','delete'),
-				'users'=>array('*'),
+				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' actions
 				'actions'=>array('admin'),

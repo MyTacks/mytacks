@@ -85,9 +85,8 @@ class TackController extends Controller
         }
     }
 
-    public function actionUpdate()
+    public function actionUpdateFeedback()
     {
-            var_dump($_GET);
             $feedback = new Feedback;
             $userId = User::model()->findByAttributes(array('username'=>$_GET['username']))->userID;
             $feedback->tack_id = $_GET['tackid'];
@@ -109,6 +108,31 @@ class TackController extends Controller
             $this->redirect($this->createUrl('/board/view/',array('id'=>$_GET['boardid'])));
     }
 
+    public function actionUpdatePosition()
+    {
+        //var_dump($_POST);
+        //return;
+        $tack=null;
+        try{
+        if(isset($_POST['id']))
+        {
+            $tack = Tack::model()->findByPk((int)$_POST['id']);
+            $tack->top = (int)$_POST["y"];
+
+            $tack->left = (int)$_POST["x"];
+            
+            $tack->setIsNewRecord(false);
+            if($tack->save()) { var_dump($_POST);return;}// true;
+            else return var_dump($tack->save());
+            return true;
+        }} catch(Exception $e)
+        {
+            var_dump($e->getMessage());
+            var_dump($tack);
+            return;
+        }
+        return false;
+    }
 
     public function accessRules()
     {
@@ -118,7 +142,7 @@ class TackController extends Controller
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions'=>array('create','update'),
+                'actions'=>array('create','update','updatePosition'),
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform 'delete' actions

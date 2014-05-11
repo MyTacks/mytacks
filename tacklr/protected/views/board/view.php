@@ -16,8 +16,7 @@ $cs->registerScriptFile($baseUrl.'/js/jquery.js');
 //$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4/ui/');
 $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 $cs->registerScriptFile('https://w.soundcloud.com/player/api.js');
-//$cs->registerScriptFile($baseUrl.'/js/ajaxScript.js');
-$cs->registerScriptFile($baseUrl.'/js/zoomooz/jquery.zoomooz.min.js');
+$cs->registerScriptFile($baseUrl.'/js/ajaxScript.js');
 
 // register tack css
 $cs->registerCssFile($baseUrl.'/css/user_tack.css');
@@ -59,7 +58,7 @@ $this->menu=array(
     <?php echo $model->description; 
         if($isOwner)
         {
-            echo "<br/>";
+            echo "<br/><br/>";
             $this->widget(
         'bootstrap.widgets.TbButton',
         array(

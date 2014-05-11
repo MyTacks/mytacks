@@ -6,7 +6,7 @@ body {
 .user_tack {
     color: grey;
     border: 2px solid darkblue;
-    position: relative;
+    position: absolute;
     display: table-cell;
     /*background: -webkit-linear-gradient(rgb(240, 240, 10),rgb(255, 255, 136));*/
     background-color: rgb(255, 255, 136);
@@ -15,13 +15,9 @@ body {
     padding: auto;
     min-width: 350px;
     max-height: 800px;
-    position: -webkit-sticky;
-    position:    -moz-sticky;
-    position:     -ms-sticky;
-    position:      -o-sticky;
-    position:         sticky;
     top: 130px;
 }
+
 .tack_title {
     text-align: center;
     border-bottom: 2px solid rgb(240, 240, 10);

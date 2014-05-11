@@ -20,6 +20,79 @@
  */
 class Board extends CActiveRecord
 {
+	 public static function getCreatorModal($caller, $owner)
+    {     
+
+        $new_board = new Board;
+
+        $caller->beginWidget(
+            'bootstrap.widgets.TbModal',
+            array('id' => 'newBoard')
+        );     
+
+        echo "
+        <div class='modal-header' align='center'>
+            <a class='close' ata-dismiss='modal'>&times;</a>
+            <h4>New board</h4>
+            ";            
+        echo "
+        </div>
+
+        <div class='modal-body' align='center'>
+            <div class='form'> ";
+            $form=$caller->beginWidget('CActiveForm', array(
+                    'id'=>'board-form',
+                    'action'=>'/mytacks/tacklr/board/create/',
+                    'method'=>'post',
+                    // Please note: When you enable ajax validation, make sure the corresponding
+                    // controller action is handling ajax validation correctly.
+                    // There is a call to performAjaxValidation() commented in generated controller code.
+                    // See class documentation of CActiveForm for details on this.
+                    'enableAjaxValidation'=>false,
+                )); 
+                echo "
+			    <p class=\"note\">Fields with <span class=\"required\">*</span> are required.</p>
+
+				
+				<div class=\"row\">";
+					echo $form->labelEx($new_board,'boardTitle'); 
+					echo $form->textField($new_board,'boardTitle',array('size'=>60,'maxlength'=>255)); 
+					echo $form->error($new_board,'boardTitle'); 
+				echo "</div>";
+
+					echo $form->labelEx($new_board,'categoryID');
+			        
+			            $models = Category::model()->findAll(array('order' => 'categoryName'));
+			            $list = CHtml::listData($models, 'categoryID', 'categoryName');
+			        	echo $form->dropDownList($new_board, 'categoryID', $list, array('empty' => 'Choose a category'));
+						echo $form->error($new_board,'categoryID');
+				echo " </br>
+			    <div class=\"row buttons\">
+			        <a href=\"/mytacks/tacklr/category/create\"><button type=\"button\">Create New Category</button></a>
+			    </div>
+
+				<div class=\"row\">";
+					echo $form->labelEx($new_board,'description');
+					echo $form->textArea($new_board,'description',array('rows'=>3, 'cols'=>50)); 
+					echo $form->error($new_board,'description'); 
+				echo "</div>
+
+                <div class='row buttons'>
+                ";
+                echo CHtml::submitButton( ($new_board->isNewRecord ? 'create' : 'Save'), array('userID'=>Yii::app()->user->getId())); 
+                
+                echo "</div>";
+            
+                $caller->endWidget(); 
+            echo "
+            </div>
+        </div><!-- form -->
+
+        </div>
+        ";
+        $caller->endWidget(); 
+    }
+
 	/**
 	 * @return string the associated database table name
 	 */

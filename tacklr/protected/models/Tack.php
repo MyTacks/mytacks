@@ -232,7 +232,7 @@ class Tack extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('tackName, tackURL, tackDescription', 'required'),
-			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
+			array('boardID, isPrivate, top, left', 'numerical', 'integerOnly'=>true),
 			array('userID', 'numerical'),
             array('tackURL', 'length', 'max'=>255),
             array('tackType', 'length', 'max'=>255),
@@ -241,7 +241,7 @@ class Tack extends CActiveRecord
 			// @todo Please remove those attributes that should not be searched.
             array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
             //array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'insert'),
-            //array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'update'),
+            array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'update'),
 		);
 	}
 
@@ -276,6 +276,8 @@ class Tack extends CActiveRecord
 			'tackDescription' => 'Tack Description',
 			'updateDate' => 'Update Date',
 			'createDate' => 'Create Date',
+            'top' => 'top',
+            'left' => 'left',
 		);
 	}
 
@@ -307,7 +309,9 @@ class Tack extends CActiveRecord
 		$criteria->compare('tackImage',$this->tackImage,true);
 		$criteria->compare('tackDescription',$this->tackDescription,true);
 		$criteria->compare('updateDate',$this->updateDate,true);
-		$criteria->compare('createDate',$this->createDate,true);
+        $criteria->compare('createDate',$this->createDate,true);
+        $criteria->compare('top',$this->top,true);
+        $criteria->compare('left',$this->left,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -337,13 +341,24 @@ class Tack extends CActiveRecord
     }
     public function toHtml($isOwner=false,$index=false)
     {
-        $pre = "<li class='user_tack pull-left pull-up' id='".$this->tackID."'>\n";// style=' position:relative;'>\n";
-        
-        $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n<p>";
+        $pre = "<li class='user_tack pull-left pull-up' id='".$this->tackID."'";
+        if(!$index && ( ((int)$this->top != 0) && ((int)$this->left != 0)))
+        {
+            $pre .= " style= position:absolute;". $this->getPostionsAsHtml($index);
+        }
+
+        $pre .= ">\n\t<div class='tack_title' id='".$this->tackName."'>\n<p>";
         
         if($isOwner)
         {
-            $pre .= "<span>" . CHtml::link('X',array('tack/delete', 'id'=>$this->tackID)) . "</span>";
+            $pre .= "<span>" . CHtml::link('X',array('tack/delete', 'id'=>$this->tackID))."   " ;
+            $pre .= CHtml::ajaxSubmitButton('Update Position',Yii::app()->createUrl('/tack/updatePosition'),
+                    array(
+                        'type'=>'POST',
+                        'data'=> 'js:{"id":'.$this->tackID.',"x":String($(\'#'.$this->tackID.'\').position().left), "y":String($(\'#'.$this->tackID.'\').position().top)}',                        
+                        //'success'=>'js:function(string){ alert(string); }',   
+                        //'error' =>'js:function(string) {alert(string);}'        
+                    ),array('class'=>'button',)). "</span>";
         }
         if($index)
         {
@@ -367,6 +382,17 @@ class Tack extends CActiveRecord
 
         return array('preContent'=>$pre, 'content'=>$this->get_widget(), 'postContent'=>$post);
 
+    }
+
+    public function getPostionsAsHtml($index=false)
+    {
+        $html = "";
+        if($index)
+        {
+            return $html;
+        }
+        $html .= (is_null($this->top) ? "" : "top:".$this->top."px;"). (is_null($this->left) ? "" : "left:".$this->left."px;");
+        return $html;
     }
 
     public function getTackDescriptionAsHtml()
@@ -397,7 +423,7 @@ class Tack extends CActiveRecord
     public function getFeedbackField($index=false)
     {
 
-        $result = '<div class="form"><form action="/mytacks/tacklr/tack/update">
+        $result = '<div class="form"><form action="/mytacks/tacklr/tack/updateFeedback">
             <div>
                 <textarea rows="3" name="comment" class="feedback_form" placeholder="Comment then press \'enter\'" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
             </div> 
