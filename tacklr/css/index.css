@@ -9,7 +9,7 @@ html {
 .tacks_container {
 	background: url(../images/cork.jpg) no-repeat center center fixed; 
 	background-size: cover;
-	margin-top: 70px;
+	margin-top: 20px;
 }
 
 .board_title {

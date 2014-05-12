@@ -33,7 +33,6 @@ class Tack extends CActiveRecord
 
         echo "
         <div class='modal-header' align='center'>
-            <a class='close' ata-dismiss='modal'>&times;</a>
             <h4>New tack</h4>
             ";            
         echo "

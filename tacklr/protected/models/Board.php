@@ -32,7 +32,6 @@ class Board extends CActiveRecord
 
         echo "
         <div class='modal-header' align='center'>
-            <a class='close' ata-dismiss='modal'>&times;</a>
             <h4>New board</h4>
             ";            
         echo "

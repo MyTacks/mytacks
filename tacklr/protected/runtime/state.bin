@@ -1,1 +1,1 @@
-a:1:{s:34:"Yii.CSecurityManager.encryptionkey";s:32:"RQegFZfgRAXNVYrHE_835u~l1d9bA_NR";}
+a:2:{s:34:"Yii.CSecurityManager.encryptionkey";s:32:"RQegFZfgRAXNVYrHE_835u~l1d9bA_NR";s:34:"Yii.CSecurityManager.validationkey";s:32:"y_43CwqYkCDBgYskfvkYeubvpX_sbqu_";}

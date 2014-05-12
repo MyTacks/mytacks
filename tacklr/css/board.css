@@ -15,7 +15,7 @@ div.tacks_container {
 	color: grey;
     border: 2px solid darkblue;
     position: fixed;
-    top:10%;
+    top:5%;
     left: 50%;
     margin-top: 10px; /*set to a negative number 1/2 of your height*/
     margin-left: -15em;
@@ -64,7 +64,7 @@ div.tacks_container {
     -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
     margin-top: 15px;
     padding: auto;
-    min-width: 350px;
+    min-width: 300px;
     max-height: 800px;
     position: -webkit-sticky;
     position:    -moz-sticky;
