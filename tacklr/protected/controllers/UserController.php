@@ -93,7 +93,7 @@ class UserController extends Controller
 					
 			}
 		}
-
+		$model->password = '';
 		$this->render('create',array(
 			'model'=>$model,
 		));
@@ -143,7 +143,10 @@ class UserController extends Controller
 			else 
 				$model->password =crypt($model->password,$model->activeKey);
 			if($model->save())
+			{
 				$this->redirect(Yii::app()->homeUrl);
+			}
+		
 		}
 		$model->password = '';
 		$this->render('update',array(

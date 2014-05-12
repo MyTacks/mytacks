@@ -11,7 +11,7 @@
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		'id'=>'horizontalForm',
 		'type'=>'vertical',
-		'enableAjaxValidation'=>false,
+		'enableAjaxValidation'=>true,
 		'htmlOptions' => array(
 				'enctype' => 'multipart/form-data',
 		),
@@ -26,8 +26,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 		<?php echo $form->textFieldRow($model, 'username',array('readonly'=>true)); ?>
 		<?php echo $form->passwordFieldRow($model, 'password'); ?>
-		<?php echo $form->passwordFieldRow($model, 'password_repeat');?>
-		<?php echo $form->textFieldRow($model,'email'); ?>
+		<?php echo $form->textFieldRow($model,'email',array('readonly'=>true)); ?>
 
 	</br> </br>
 	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>'Update')); ?>
