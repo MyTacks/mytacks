@@ -413,7 +413,7 @@ class Tack extends CActiveRecord
 
                             
             $result .= $feedback->content;
-            $result .= "<p><div class='feedback_meta'>".$owner->username." on ".$timestamp.((string)$feedback->owner_id == (string)User::model()->findByAttributes(array('username'=>Yii::app()->user->id))->userID ? "<a href='".Yii::app()->createUrl("tack/deleteFeedback", array('id'=>$feedback->feedback_id,'boardid'=>$this->boardID))."'>\tDELETE</a>" : "")."</div></style></p><br/>";
+            $result .= "<p><div class='feedback_meta'>".$owner->username." on ".$timestamp.((string)$feedback->owner_id == ( (Yii::app()->user->isGuest ? false : (string)User::model()->findByAttributes(array('username'=>Yii::app()->user->id))->userID ? "<a href='".Yii::app()->createUrl("tack/deleteFeedback", array('id'=>$feedback->feedback_id,'boardid'=>$this->boardID))."'>\tDELETE</a>" : "")))."</div></style></p><br/>";
         }
         return $result;
     }
