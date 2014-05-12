@@ -4,18 +4,18 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
-
+<div class="form_tack">
+		<div class="tack_title">Update Profile</div>
 
 <?php 
-
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		'id'=>'horizontalForm',
-		'type'=>'horizontal',
+		'type'=>'vertical',
 		'enableAjaxValidation'=>false,
 		'htmlOptions' => array(
 				'enctype' => 'multipart/form-data',
 		),
+		'htmlOptions'=>array('class'=>'tack_content'),
 ));
 
  ?>
@@ -29,11 +29,10 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		<?php echo $form->passwordFieldRow($model, 'password_repeat');?>
 		<?php echo $form->textFieldRow($model,'email'); ?>
 
-		
-	<div class="form-actions">
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>'Update')); ?>
+	</br> </br>
+	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>'Update')); ?>
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'cancel', 'label'=>'Cancel','url'=>Yii::app()->request->urlReferrer)); ?>
-	</div>
+
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

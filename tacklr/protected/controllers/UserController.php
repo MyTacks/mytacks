@@ -32,7 +32,7 @@ class UserController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('profile'),
+				'actions'=>array('updateprofile'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -125,11 +125,10 @@ class UserController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionProfile($id)
+	public function actionUpdateProfile($id)
 	{
 		$model= User::model()->findByAttributes(array('username'=>$id));
 		$oldPassWord = $model->password;
-		$model=$this->loadModel($id);
 		$pst = new DateTimeZone('America/Los_Angeles');
 		$date = new DateTime();
 		$date->setTimezone($pst);
@@ -174,7 +173,7 @@ class UserController extends Controller
 			else 
 				$model->password =crypt($model->password,$model->activeKey);
 			if($model->save())
-					$this->redirect($this->createUrl('//user/admin'));
+				$this->redirect($this->createUrl('//user/admin'));
 		}
 		$model->password = '';
 		$this->render('update',array(

@@ -20,7 +20,7 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
-
+</br>
 <h1>Manage Users</h1>
 
 <div class="search-form" style="display:none">
@@ -31,7 +31,7 @@ $('.search-form form').submit(function(){
 
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'user-grid',
-	'type'=>'striped',
+	'type'=>'striped bordered condensed',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
